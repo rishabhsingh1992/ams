@@ -1,13 +1,13 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonContent,
+  IonHeader, IonToolbar, IonContent, IonFooter,
   IonCard, IonCardContent, IonIcon, IonButton,
-  IonModal, ToastController,
+  ToastController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  logInOutline, logOutOutline, calendarOutline,
+  logInOutline, logOutOutline,
   notificationsOutline, checkmarkCircleOutline,
 } from 'ionicons/icons';
 import { CameraModalComponent } from '../shared/components/camera-modal/camera-modal.component';
@@ -29,26 +29,25 @@ interface TodayRecord {
   styleUrls: ['tab1.page.scss'],
   imports: [
     DatePipe,
-    IonHeader, IonToolbar, IonContent,
+    IonHeader, IonToolbar, IonContent, IonFooter,
     IonCard, IonCardContent, IonIcon, IonButton,
-    IonModal, CameraModalComponent,
+    CameraModalComponent,
   ],
 })
 export class Tab1Page implements OnInit {
   private toastCtrl = inject(ToastController);
-  @ViewChild(CameraModalComponent) cameraModalComponent?: CameraModalComponent;
+  @ViewChild(CameraModalComponent) cameraComp?: CameraModalComponent;
 
   today        = new Date();
   checkStatus: CheckStatus = 'not-started';
   checkInTime  = '';
   checkOutTime = '';
   hoursWorked  = '';
-  isCameraModalOpen = false;
 
-  pendingAction: 'check-in' | 'check-out' | null = null;
+  private pendingAction: 'check-in' | 'check-out' | null = null;
 
   get statusLabel(): string {
-    return ({ 'not-started': 'Not Checked In', 'checked-in': 'Active', 'checked-out': 'Checked Out' })[this.checkStatus];
+    return ({ 'not-started': 'Not Clocked In', 'checked-in': 'Active', 'checked-out': 'Clocked Out' })[this.checkStatus];
   }
 
   get statusColor(): string {
@@ -56,39 +55,27 @@ export class Tab1Page implements OnInit {
   }
 
   constructor() {
-    addIcons({ logInOutline, logOutOutline, calendarOutline, notificationsOutline, checkmarkCircleOutline });
+    addIcons({ logInOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline });
   }
 
   ngOnInit() { this.loadFromStorage(); }
 
+  ionViewDidEnter() { this.cameraComp?.start(); }
+
+  ionViewWillLeave() { this.cameraComp?.stop(); }
+
   onCheckIn() {
     this.pendingAction = 'check-in';
-    this.isCameraModalOpen = true;
+    this.cameraComp?.onCapture();
   }
 
   onCheckOut() {
     this.pendingAction = 'check-out';
-    this.isCameraModalOpen = true;
+    this.cameraComp?.onCapture();
   }
 
   onCapture() {
-    this.isCameraModalOpen = false;
     this.applyAction(this.nowFormatted());
-  }
-
-  onCameraCancel() {
-    this.isCameraModalOpen = false;
-    this.pendingAction = null;
-  }
-
-  onCameraModalPresent() {
-    this.cameraModalComponent?.start();
-  }
-
-  onCameraModalDismiss() {
-    this.cameraModalComponent?.stop();
-    this.isCameraModalOpen = false;
-    this.pendingAction = null;
   }
 
   private applyAction(time: string) {
@@ -97,12 +84,12 @@ export class Tab1Page implements OnInit {
       this.checkOutTime = '';
       this.hoursWorked  = '';
       this.checkStatus  = 'checked-in';
-      this.showToast(`Checked in at ${time}`);
+      this.showToast(`Clocked in at ${time}`);
     } else if (this.pendingAction === 'check-out') {
       this.checkOutTime = time;
       this.checkStatus  = 'checked-out';
       this.hoursWorked  = this.calcHours(this.checkInTime, time);
-      this.showToast(`Checked out at ${time}`);
+      this.showToast(`Clocked out at ${time}`);
     }
     this.saveToStorage();
     this.pendingAction = null;

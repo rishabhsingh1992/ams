@@ -1,50 +1,10 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>Selfie Verification</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="onCancel()" color="light">
-        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [scrollY]="false">
-  <div class="camera-wrapper">
-    <!-- Camera Preview Area (Native Camera Renders Here) -->
-    <div class="camera-preview-container">
-      <div class="camera-preview-area" #previewArea></div>
-      <!-- Premium scanning frame overlay around the preview borders -->
-      <div class="camera-frame-glow"></div>
-    </div>
-
-    <!-- Controls Panel -->
-    <div class="camera-controls-panel">
-      <p class="camera-hint">
-        {{ pendingAction === 'check-in' ? 'Check In — take a selfie' : 'Check Out — take a selfie' }}
-      </p>
-
-      <div class="camera-actions">
-        <!-- Flip Camera Button -->
-        <button class="cam-icon-btn" (click)="onFlip()" aria-label="Flip Camera">
-          <ion-icon name="camera-reverse-outline"></ion-icon>
-        </button>
-
-        <!-- Shutter Button with press animations -->
-        <button class="shutter-btn" [class.capturing]="isCapturing" (click)="onCapture()" aria-label="Capture Photo">
-          <div class="shutter-inner">
-            @if (isCapturing) {
-              <div class="shutter-spinner"></div>
-            }
-          </div>
-        </button>
-
-        <!-- Symmetrical spacer to center the shutter button -->
-        <div class="action-spacer"></div>
-      </div>
-
-      <!-- Cancel Button -->
-      <button class="cancel-btn" (click)="onCancel()">Cancel</button>
-    </div>
-  </div>
-</ion-content>
+<div class="camera-inline">
+  <div class="preview-area" #previewArea></div>
+  <div class="camera-frame-glow"></div>
+  <button class="flip-btn" (click)="onFlip()" aria-label="Flip camera">
+    <ion-icon name="camera-reverse-outline"></ion-icon>
+  </button>
+  @if (isCapturing) {
+    <div class="capture-flash"></div>
+  }
+</div>

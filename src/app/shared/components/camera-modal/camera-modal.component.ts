@@ -1,26 +1,18 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  IonHeader, IonToolbar, IonContent, IonTitle, IonButtons, IonButton, IonIcon
-} from '@ionic/angular/standalone';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { closeOutline, cameraReverseOutline } from 'ionicons/icons';
+import { cameraReverseOutline } from 'ionicons/icons';
 import { CameraPreview } from '@capacitor-community/camera-preview';
 
 @Component({
   selector: 'app-camera-modal',
   templateUrl: './camera-modal.component.html',
   styleUrls: ['./camera-modal.component.scss'],
-  imports: [
-    CommonModule,
-    IonHeader, IonToolbar, IonContent, IonTitle, IonButtons, IonButton, IonIcon
-  ],
+  imports: [IonIcon],
   standalone: true
 })
 export class CameraModalComponent implements OnDestroy {
-  @Input() pendingAction: 'check-in' | 'check-out' | null = null;
   @Output() capture = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
 
   @ViewChild('previewArea', { static: false }) previewArea!: ElementRef<HTMLElement>;
 
@@ -28,7 +20,7 @@ export class CameraModalComponent implements OnDestroy {
   isCapturing = false;
 
   constructor() {
-    addIcons({ closeOutline, cameraReverseOutline });
+    addIcons({ cameraReverseOutline });
   }
 
   async start() {
@@ -79,17 +71,12 @@ export class CameraModalComponent implements OnDestroy {
     try {
       this.isCapturing = true;
       await CameraPreview.capture({ quality: 85 });
-      await this.stop();
       this.isCapturing = false;
       this.capture.emit();
     } catch (err) {
       this.isCapturing = false;
       console.error('Error capturing image:', err);
     }
-  }
-
-  onCancel() {
-    this.cancel.emit();
   }
 
   async ngOnDestroy() {
