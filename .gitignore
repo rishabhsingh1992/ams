@@ -1,0 +1,101 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+# ─── Build Outputs ───────────────────────────────────────────────────────────
+/dist
+/www
+/out-tsc
+/bazel-out
+/.sourcemaps
+/coverage
+
+# ─── Node ────────────────────────────────────────────────────────────────────
+/node_modules
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# ─── Angular / Ionic ─────────────────────────────────────────────────────────
+/.angular
+/.ionic
+/.versions
+/tmp
+/typings
+
+# ─── Capacitor Native Platforms ──────────────────────────────────────────────
+/android
+/ios
+/platforms
+/plugins
+
+# ─── Environment & Secrets ───────────────────────────────────────────────────
+src/environments/environment*.ts
+!src/environments/environment.ts
+!src/environments/environment.example.ts
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# ─── IDEs and Editors ────────────────────────────────────────────────────────
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+.history/
+*.code-workspace
+
+# ─── VS Code (keep shared config, ignore personal) ───────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ─── Claude Code ─────────────────────────────────────────────────────────────
+.claude/
+TASKS.md
+MEMORY.md
+
+# ─── Logs & Temp ─────────────────────────────────────────────────────────────
+*.log
+log.txt
+*.tmp
+*.tmp.*
+.tmp
+/connect.lock
+/libpeerconnection.log
+testem.log
+
+# ─── OS Files ────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V4
+.Trashes
+ehthumbs.db
+Thumbs.db
+$RECYCLE.BIN/
+desktop.ini
+
+# ─── Sass ────────────────────────────────────────────────────────────────────
+.sass-cache/
+
+# ─── NX (if added later) ─────────────────────────────────────────────────────
+/.nx/cache
+
+# ─── Xcode ───────────────────────────────────────────────────────────────────
+UserInterfaceState.xcuserstate
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+
+# ─── Vim swap files ──────────────────────────────────────────────────────────
+*~
+*.sw[mnpcod]

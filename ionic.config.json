@@ -1,0 +1,7 @@
+{
+  "name": "ams",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
