@@ -1,17 +1,105 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [style.visibility]="cameraActive ? 'hidden' : 'visible'">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Attendance</ion-title>
+  </ion-toolbar>
+
+  <!-- Month selector -->
+  <ion-toolbar>
+    <ion-segment [value]="selectedMonth" (ionChange)="onMonthChange($event)">
+      <ion-segment-button value="current">
+        <ion-label>{{ months['current'].label }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="last">
+        <ion-label>{{ months['last'].label }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [class.transparent-bg]="cameraActive">
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- Month summary chips -->
+  <div class="summary-row">
+    <ion-chip class="chip chip--present">
+      <strong>{{ current.present }}</strong>&nbsp;Present
+    </ion-chip>
+    <ion-chip class="chip chip--absent">
+      <strong>{{ current.absent }}</strong>&nbsp;Absent
+    </ion-chip>
+    <ion-chip class="chip chip--late">
+      <strong>{{ current.late }}</strong>&nbsp;Late
+    </ion-chip>
+    <ion-chip class="chip chip--leave">
+      <strong>{{ current.leave }}</strong>&nbsp;Leave
+    </ion-chip>
+  </div>
+
+  <!-- Attendance records list -->
+  <ion-list lines="none" class="record-list">
+    @for (record of current.records; track record.date) {
+
+      <ion-item class="record-item record-item--{{ record.status }}">
+
+        <!-- Date block on the left -->
+        <div slot="start" class="record-date">
+          <span class="record-date__day">{{ record.day }}</span>
+          <span class="record-date__num">{{ record.date }}</span>
+        </div>
+
+        <!-- Check-in and check-out times -->
+        <ion-label class="record-body">
+          @if (record.checkIn) {
+            <div class="record-times">
+              <span class="time-in">
+                <ion-icon name="arrow-up-outline"></ion-icon>{{ record.checkIn }}
+              </span>
+              <span class="time-sep">→</span>
+              <span class="time-out">
+                <ion-icon name="arrow-down-outline"></ion-icon>{{ record.checkOut || 'Active' }}
+              </span>
+            </div>
+            <p class="record-hours">{{ record.hours }}</p>
+          } @else {
+            <p class="record-no-times">—</p>
+          }
+        </ion-label>
+
+        <!-- Status badge + camera button on the right -->
+        <div slot="end" class="record-end">
+          <ion-badge class="status-badge status-badge--{{ record.status }}">
+            {{ statusLabel(record.status) }}
+          </ion-badge>
+          <ion-button fill="clear" size="small" color="medium" class="camera-btn" (click)="openCamera()">
+            <ion-icon name="camera-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+
+      </ion-item>
+
+    }
+  </ion-list>
+
+  <!-- ── In-app camera preview overlay ───────────────────── -->
+  @if (cameraActive) {
+    <div class="camera-overlay">
+
+      <div class="camera-header">
+        <button class="cam-icon-btn" (click)="closeCamera()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+        <p class="camera-hint">Add a photo</p>
+        <div style="width: 44px"></div>
+      </div>
+
+      <div class="camera-viewfinder"></div>
+
+      <div class="camera-footer">
+        <button class="shutter-btn" (click)="onCapture()">
+          <div class="shutter-inner"></div>
+        </button>
+      </div>
+
+    </div>
+  }
+
 </ion-content>

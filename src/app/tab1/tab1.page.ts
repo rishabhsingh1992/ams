@@ -1,31 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonGrid, IonRow, IonCol, IonCard, IonCardContent,
-  IonIcon, IonList, IonItem, IonLabel, IonBadge,
-  IonButton, IonNote,
+  IonHeader, IonToolbar, IonContent,
+  IonCard, IonCardContent, IonIcon, IonButton,
+  ToastController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  cubeOutline, checkmarkCircleOutline, constructOutline,
-  archiveOutline, addOutline, qrCodeOutline, listOutline,
-  timeOutline,
+  logInOutline, logOutOutline, calendarOutline,
+  notificationsOutline, checkmarkCircleOutline,
+  closeOutline, cameraReverseOutline,
 } from 'ionicons/icons';
+import { Capacitor } from '@capacitor/core';
+import { CameraPreview } from '@capacitor-community/camera-preview';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
-interface AssetStat {
-  label: string;
-  count: number;
-  icon: string;
-  color: string;
-}
+type CheckStatus = 'not-started' | 'checked-in' | 'checked-out';
 
-interface RecentAsset {
-  id: string;
-  name: string;
-  category: string;
-  status: 'active' | 'maintenance' | 'retired';
-  updatedAt: Date;
+const STORAGE_KEY = 'ams_today';
+
+interface TodayRecord {
+  date: string;
+  checkInTime: string;
+  checkOutTime: string;
+  status: CheckStatus;
 }
 
 @Component({
@@ -34,44 +32,162 @@ interface RecentAsset {
   styleUrls: ['tab1.page.scss'],
   imports: [
     DatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonGrid, IonRow, IonCol, IonCard, IonCardContent,
-    IonIcon, IonList, IonItem, IonLabel, IonBadge,
-    IonButton, IonNote,
+    IonHeader, IonToolbar, IonContent,
+    IonCard, IonCardContent, IonIcon, IonButton,
   ],
 })
-export class Tab1Page {
-  today = new Date();
+export class Tab1Page implements OnInit {
+  private toastCtrl = inject(ToastController);
 
-  stats: AssetStat[] = [
-    { label: 'Total Assets', count: 142, icon: 'cube-outline',              color: 'primary' },
-    { label: 'Active',       count: 118, icon: 'checkmark-circle-outline',  color: 'success' },
-    { label: 'Maintenance',  count: 17,  icon: 'construct-outline',         color: 'warning' },
-    { label: 'Retired',      count: 7,   icon: 'archive-outline',           color: 'medium'  },
-  ];
+  today        = new Date();
+  checkStatus: CheckStatus = 'not-started';
+  checkInTime  = '';
+  checkOutTime = '';
+  hoursWorked  = '';
+  cameraActive = false;
 
-  recentAssets: RecentAsset[] = [
-    { id: 'AST-001', name: 'Dell Laptop 15"',  category: 'IT Hardware', status: 'active',      updatedAt: new Date('2025-05-22') },
-    { id: 'AST-047', name: 'Forklift Unit B',  category: 'Machinery',   status: 'maintenance', updatedAt: new Date('2025-05-21') },
-    { id: 'AST-083', name: 'Office Chair Set', category: 'Furniture',   status: 'active',      updatedAt: new Date('2025-05-20') },
-    { id: 'AST-112', name: 'HVAC Unit #3',     category: 'Facilities',  status: 'maintenance', updatedAt: new Date('2025-05-19') },
-    { id: 'AST-130', name: 'Projector Epson',  category: 'IT Hardware', status: 'retired',     updatedAt: new Date('2025-05-18') },
-  ];
+  pendingAction: 'check-in' | 'check-out' | null = null;
 
-  statusColor(status: RecentAsset['status']): string {
-    const map: Record<RecentAsset['status'], string> = {
-      active: 'success',
-      maintenance: 'warning',
-      retired: 'medium',
-    };
-    return map[status];
+  get statusLabel(): string {
+    return ({ 'not-started': 'Not Checked In', 'checked-in': 'Active', 'checked-out': 'Checked Out' })[this.checkStatus];
+  }
+
+  get statusColor(): string {
+    return ({ 'not-started': '#8C8C8C', 'checked-in': '#2DD36F', 'checked-out': '#3880FF' })[this.checkStatus];
   }
 
   constructor() {
-    addIcons({
-      cubeOutline, checkmarkCircleOutline, constructOutline,
-      archiveOutline, addOutline, qrCodeOutline, listOutline,
-      timeOutline,
+    addIcons({ logInOutline, logOutOutline, calendarOutline, notificationsOutline, checkmarkCircleOutline, closeOutline, cameraReverseOutline });
+  }
+
+  ngOnInit() { this.loadFromStorage(); }
+
+  async onCheckIn() {
+    this.pendingAction = 'check-in';
+    await this.startCamera();
+  }
+
+  async onCheckOut() {
+    this.pendingAction = 'check-out';
+    await this.startCamera();
+  }
+
+  async onCapture() {
+    await CameraPreview.capture({ quality: 85 });
+    await CameraPreview.stop();
+    this.cameraActive = false;
+    this.applyAction(this.nowFormatted());
+  }
+
+  async onCameraCancel() {
+    await CameraPreview.stop();
+    this.cameraActive = false;
+    this.pendingAction = null;
+  }
+
+  async onFlipCamera() {
+    await CameraPreview.flip();
+  }
+
+  private async startCamera() {
+    if (!Capacitor.isNativePlatform()) {
+      // Web fallback: open file/camera picker and skip preview UI
+      const ok = await this.webCapture();
+      if (ok) this.applyAction(this.nowFormatted());
+      else this.pendingAction = null;
+      return;
+    }
+
+    this.cameraActive = true;
+    await CameraPreview.start({
+      position: 'front',
+      toBack: true,
+      enableOpacity: true,
+      disableAudio: true,
+      width: window.screen.width,
+      height: window.screen.height,
+      x: 0,
+      y: 0,
     });
+  }
+
+  private applyAction(time: string) {
+    if (this.pendingAction === 'check-in') {
+      this.checkInTime  = time;
+      this.checkOutTime = '';
+      this.hoursWorked  = '';
+      this.checkStatus  = 'checked-in';
+      this.showToast(`Checked in at ${time}`);
+    } else if (this.pendingAction === 'check-out') {
+      this.checkOutTime = time;
+      this.checkStatus  = 'checked-out';
+      this.hoursWorked  = this.calcHours(this.checkInTime, time);
+      this.showToast(`Checked out at ${time}`);
+    }
+    this.saveToStorage();
+    this.pendingAction = null;
+  }
+
+  private async webCapture(): Promise<boolean> {
+    try {
+      await Camera.getPhoto({ quality: 70, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
+      return true;
+    } catch { return false; }
+  }
+
+  private loadFromStorage() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    const record: TodayRecord = JSON.parse(raw);
+    const todayStr = this.today.toISOString().split('T')[0];
+
+    if (record.date !== todayStr) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    this.checkInTime  = record.checkInTime;
+    this.checkOutTime = record.checkOutTime;
+    this.checkStatus  = record.status;
+    if (this.checkInTime && this.checkOutTime) {
+      this.hoursWorked = this.calcHours(this.checkInTime, this.checkOutTime);
+    }
+  }
+
+  private saveToStorage() {
+    const record: TodayRecord = {
+      date:         this.today.toISOString().split('T')[0],
+      checkInTime:  this.checkInTime,
+      checkOutTime: this.checkOutTime,
+      status:       this.checkStatus,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+  }
+
+  private nowFormatted(): string {
+    const d    = new Date();
+    const h    = d.getHours();
+    const m    = d.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12  = h % 12 || 12;
+    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  private calcHours(inTime: string, outTime: string): string {
+    const toMin = (t: string) => {
+      const [hm, period] = t.split(' ');
+      const [h, m]       = hm.split(':').map(Number);
+      const h24 = period === 'PM' && h !== 12 ? h + 12 : period === 'AM' && h === 12 ? 0 : h;
+      return h24 * 60 + m;
+    };
+    const diff = toMin(outTime) - toMin(inTime);
+    if (diff <= 0) return '0h 0m';
+    return `${Math.floor(diff / 60)}h ${diff % 60}m`;
+  }
+
+  private async showToast(message: string) {
+    const t = await this.toastCtrl.create({ message, duration: 2000, position: 'bottom', color: 'dark' });
+    await t.present();
   }
 }

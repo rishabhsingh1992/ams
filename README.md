@@ -1,4 +1,4 @@
-# AMS — Asset Management System
+# AMS — Attendance Management System
 
 A cross-platform mobile application built with **Ionic 8**, **Angular 20**, and **Capacitor 8**.
 
