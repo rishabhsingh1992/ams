@@ -19,13 +19,15 @@
     <ion-card class="status-card">
       <ion-card-content>
 
-        <p class="status-date">{{ today | date:'EEEE, MMMM d' }}</p>
-
-        <div class="status-pill"
-             [style.color]="statusColor"
-             [style.background]="statusColor + '18'">
-          <span class="live-dot" [style.background]="statusColor"></span>
-          {{ statusLabel }}
+        <!-- Date and status on the same row -->
+        <div class="card-header-row">
+          <p class="status-date">{{ today | date:'EEE, MMM d' }}</p>
+          <div class="status-pill"
+               [style.color]="statusColor"
+               [style.background]="statusColor + '18'">
+            <span class="live-dot" [style.background]="statusColor"></span>
+            {{ statusLabel }}
+          </div>
         </div>
 
         <div class="time-row">
@@ -50,7 +52,7 @@
 
     <!-- Inline camera preview -->
     <div class="camera-section">
-      <app-camera-modal (capture)="onCapture()"></app-camera-modal>
+      <app-camera-preview (capture)="onCapture()"></app-camera-preview>
     </div>
 
   </div>

@@ -1,0 +1,35 @@
+<div class="camera-inline">
+
+  <!-- Live camera preview area (hidden while showing captured image) -->
+  <div class="preview-area" #previewArea [class.hidden]="!!capturedImage"></div>
+
+  <!-- Live camera overlays -->
+  @if (!capturedImage) {
+    <div class="camera-frame-glow"></div>
+    <button class="flip-btn" (click)="onFlip()" aria-label="Flip camera">
+      <ion-icon name="camera-reverse-outline"></ion-icon>
+    </button>
+    @if (isCapturing) {
+      <div class="capture-flash"></div>
+    }
+  }
+
+  <!-- Captured image confirmation -->
+  @if (capturedImage) {
+    <img class="captured-img" [src]="capturedImage" alt="Captured selfie" />
+    <div class="confirm-panel">
+      <p class="confirm-hint">Use this photo?</p>
+      <div class="confirm-actions">
+        <button class="retake-btn" (click)="onRetake()">
+          <ion-icon name="refresh-outline"></ion-icon>
+          Retake
+        </button>
+        <button class="confirm-btn" (click)="onConfirm()">
+          <ion-icon name="checkmark-outline"></ion-icon>
+          Confirm
+        </button>
+      </div>
+    </div>
+  }
+
+</div>

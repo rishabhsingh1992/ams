@@ -47,32 +47,39 @@ ion-content {
 .status-card {
   margin: 0;
   border-radius: 20px;
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.09);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
 
-  ion-card-content { padding: 22px; }
+  ion-card-content { padding: 14px 16px; }
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 .status-date {
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 13px;
+  font-weight: 500;
   color: var(--ion-color-medium);
 }
 
 .status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 30px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  margin-bottom: 22px;
 }
 
 .live-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -81,8 +88,8 @@ ion-content {
   display: flex;
   align-items: center;
   background: var(--ion-color-light);
-  border-radius: 14px;
-  padding: 14px 0;
+  border-radius: 12px;
+  padding: 10px 0;
 }
 
 .time-block {
@@ -90,9 +97,9 @@ ion-content {
   text-align: center;
 
   &__label {
-    margin: 0 0 5px;
-    font-size: 10px;
-    font-weight: 500;
+    margin: 0 0 3px;
+    font-size: 9px;
+    font-weight: 600;
     color: var(--ion-color-medium);
     text-transform: uppercase;
     letter-spacing: 0.6px;
@@ -100,7 +107,7 @@ ion-content {
 
   &__value {
     margin: 0;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--ion-color-dark);
   }
@@ -108,7 +115,7 @@ ion-content {
 
 .time-sep {
   width: 1px;
-  height: 32px;
+  height: 26px;
   background: var(--ion-color-light-shade);
 }
 

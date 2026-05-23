@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   IonHeader, IonToolbar, IonContent, IonFooter,
   IonCard, IonCardContent, IonIcon, IonButton,
@@ -10,7 +11,7 @@ import {
   logInOutline, logOutOutline,
   notificationsOutline, checkmarkCircleOutline,
 } from 'ionicons/icons';
-import { CameraModalComponent } from '../shared/components/camera-modal/camera-modal.component';
+import { CameraPreviewComponent } from '../shared/components/camera-preview/camera-preview.component';
 
 type CheckStatus = 'not-started' | 'checked-in' | 'checked-out';
 
@@ -31,12 +32,13 @@ interface TodayRecord {
     DatePipe,
     IonHeader, IonToolbar, IonContent, IonFooter,
     IonCard, IonCardContent, IonIcon, IonButton,
-    CameraModalComponent,
+    CameraPreviewComponent,
   ],
 })
 export class Tab1Page implements OnInit {
   private toastCtrl = inject(ToastController);
-  @ViewChild(CameraModalComponent) cameraComp?: CameraModalComponent;
+  private router    = inject(Router);
+  @ViewChild(CameraPreviewComponent) cameraComp?: CameraPreviewComponent;
 
   today        = new Date();
   checkStatus: CheckStatus = 'not-started';
@@ -93,6 +95,7 @@ export class Tab1Page implements OnInit {
     }
     this.saveToStorage();
     this.pendingAction = null;
+    this.router.navigateByUrl('/tabs/tab2');
   }
 
   private loadFromStorage() {

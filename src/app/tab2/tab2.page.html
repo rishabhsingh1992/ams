@@ -3,7 +3,6 @@
     <ion-title>Attendance</ion-title>
   </ion-toolbar>
 
-  <!-- Month selector -->
   <ion-toolbar>
     <ion-segment [value]="selectedMonth" (ionChange)="onMonthChange($event)">
       <ion-segment-button value="current">
@@ -17,63 +16,46 @@
 </ion-header>
 
 <ion-content>
-
-  <!-- Month summary chips -->
-  <div class="summary-row">
-    <ion-chip class="chip chip--present">
-      <strong>{{ current.present }}</strong>&nbsp;Present
-    </ion-chip>
-    <ion-chip class="chip chip--absent">
-      <strong>{{ current.absent }}</strong>&nbsp;Absent
-    </ion-chip>
-    <ion-chip class="chip chip--late">
-      <strong>{{ current.late }}</strong>&nbsp;Late
-    </ion-chip>
-    <ion-chip class="chip chip--leave">
-      <strong>{{ current.leave }}</strong>&nbsp;Leave
-    </ion-chip>
-  </div>
-
-  <!-- Attendance records list -->
-  <ion-list lines="none" class="record-list">
+  <div class="card-list">
     @for (record of current.records; track record.date) {
 
-      <ion-item class="record-item record-item--{{ record.status }}">
+      <div class="record-card record-card--{{ record.status }}">
 
-        <!-- Date block on the left -->
-        <div slot="start" class="record-date">
-          <span class="record-date__day">{{ record.day }}</span>
-          <span class="record-date__num">{{ record.date }}</span>
-        </div>
-
-        <!-- Check-in and check-out times -->
-        <ion-label class="record-body">
-          @if (record.checkIn) {
-            <div class="record-times">
-              <span class="time-in">
-                <ion-icon name="arrow-up-outline"></ion-icon>{{ record.checkIn }}
-              </span>
-              <span class="time-sep">→</span>
-              <span class="time-out">
-                <ion-icon name="arrow-down-outline"></ion-icon>{{ record.checkOut || 'Active' }}
-              </span>
-            </div>
-            <p class="record-hours">{{ record.hours }}</p>
-          } @else {
-            <p class="record-no-times">—</p>
-          }
-        </ion-label>
-
-        <!-- Status badge on the right -->
-        <div slot="end" class="record-end">
+        <!-- Header row: date + badge -->
+        <div class="card-header">
+          <div class="card-date">
+            <span class="card-date__day">{{ record.day }}</span>
+            <span class="card-date__num">{{ record.date }}</span>
+          </div>
           <ion-badge class="status-badge status-badge--{{ record.status }}">
-            {{ statusLabel(record.status) }}
+            {{ record.hours === 'Active' ? 'Active' : statusLabel(record.status) }}
           </ion-badge>
         </div>
 
-      </ion-item>
+        <!-- Times row -->
+        @if (record.checkIn) {
+          <div class="card-times">
+            <div class="time-col">
+              <p class="time-col__label">Clock In</p>
+              <p class="time-col__value time-col__value--in">{{ record.checkIn }}</p>
+            </div>
+            <div class="time-divider"></div>
+            <div class="time-col">
+              <p class="time-col__label">Clock Out</p>
+              <p class="time-col__value time-col__value--out">{{ record.checkOut || '—' }}</p>
+            </div>
+            <div class="time-divider"></div>
+            <div class="time-col">
+              <p class="time-col__label">Hours</p>
+              <p class="time-col__value">{{ record.hours }}</p>
+            </div>
+          </div>
+        } @else {
+          <p class="card-empty">{{ record.status === 'leave' ? 'On Leave' : 'No attendance recorded' }}</p>
+        }
+
+      </div>
 
     }
-  </ion-list>
-
+  </div>
 </ion-content>
