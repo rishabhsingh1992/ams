@@ -1,17 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
   IonHeader, IonToolbar, IonContent,
   IonCard, IonCardContent, IonIcon, IonButton,
-  ToastController,
+  IonModal, ToastController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   logInOutline, logOutOutline, calendarOutline,
   notificationsOutline, checkmarkCircleOutline,
-  closeOutline, cameraReverseOutline,
 } from 'ionicons/icons';
-import { CameraPreview } from '@capacitor-community/camera-preview';
+import { CameraModalComponent } from '../shared/components/camera-modal/camera-modal.component';
 
 type CheckStatus = 'not-started' | 'checked-in' | 'checked-out';
 
@@ -32,17 +31,19 @@ interface TodayRecord {
     DatePipe,
     IonHeader, IonToolbar, IonContent,
     IonCard, IonCardContent, IonIcon, IonButton,
+    IonModal, CameraModalComponent,
   ],
 })
 export class Tab1Page implements OnInit {
   private toastCtrl = inject(ToastController);
+  @ViewChild(CameraModalComponent) cameraModalComponent?: CameraModalComponent;
 
   today        = new Date();
   checkStatus: CheckStatus = 'not-started';
   checkInTime  = '';
   checkOutTime = '';
   hoursWorked  = '';
-  cameraActive = false;
+  isCameraModalOpen = false;
 
   pendingAction: 'check-in' | 'check-out' | null = null;
 
@@ -55,54 +56,39 @@ export class Tab1Page implements OnInit {
   }
 
   constructor() {
-    addIcons({ logInOutline, logOutOutline, calendarOutline, notificationsOutline, checkmarkCircleOutline, closeOutline, cameraReverseOutline });
+    addIcons({ logInOutline, logOutOutline, calendarOutline, notificationsOutline, checkmarkCircleOutline });
   }
 
   ngOnInit() { this.loadFromStorage(); }
 
-  async onCheckIn() {
+  onCheckIn() {
     this.pendingAction = 'check-in';
-    await this.startCamera();
+    this.isCameraModalOpen = true;
   }
 
-  async onCheckOut() {
+  onCheckOut() {
     this.pendingAction = 'check-out';
-    await this.startCamera();
+    this.isCameraModalOpen = true;
   }
 
-  async onCapture() {
-    await CameraPreview.capture({ quality: 85 });
-    await CameraPreview.stop();
-    this.cameraActive = false;
+  onCapture() {
+    this.isCameraModalOpen = false;
     this.applyAction(this.nowFormatted());
   }
 
-  async onCameraCancel() {
-    await CameraPreview.stop();
-    this.cameraActive = false;
+  onCameraCancel() {
+    this.isCameraModalOpen = false;
     this.pendingAction = null;
   }
 
-  async onFlipCamera() {
-    await CameraPreview.flip();
+  onCameraModalPresent() {
+    this.cameraModalComponent?.start();
   }
 
-  private async startCamera() {
-    this.cameraActive = true;
-    // Wait one frame for Angular to render the .camera-preview-area element
-    setTimeout(async () => {
-      const el = document.querySelector('.camera-preview-area') as HTMLElement;
-      const rect = el.getBoundingClientRect();
-      await CameraPreview.start({
-        position: 'front',
-        toBack: false,
-        disableAudio: true,
-        x: Math.round(rect.left),
-        y: Math.round(rect.top),
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
-      });
-    }, 50);
+  onCameraModalDismiss() {
+    this.cameraModalComponent?.stop();
+    this.isCameraModalOpen = false;
+    this.pendingAction = null;
   }
 
   private applyAction(time: string) {
