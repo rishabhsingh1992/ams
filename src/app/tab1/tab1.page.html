@@ -1,17 +1,89 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>AMS Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- Greeting -->
+  <div class="greeting">
+    <p class="greeting__date">{{ today | date:'EEEE, MMMM d' }}</p>
+    <h2 class="greeting__title">Asset Overview</h2>
+  </div>
+
+  <!-- Stat Cards -->
+  <ion-grid class="stats-grid">
+    <ion-row>
+      @for (stat of stats; track stat.label) {
+        <ion-col size="6">
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <ion-icon [name]="stat.icon" [color]="stat.color" class="stat-card__icon"></ion-icon>
+              <p class="stat-card__count">{{ stat.count }}</p>
+              <p class="stat-card__label">{{ stat.label }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+
+  <!-- Quick Actions -->
+  <div class="section-header">
+    <h3>Quick Actions</h3>
+  </div>
+  <ion-grid class="actions-grid">
+    <ion-row>
+      <ion-col size="4">
+        <ion-button expand="block" fill="outline" color="primary" class="action-btn">
+          <div class="action-btn__inner">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>Add Asset</span>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" fill="outline" color="primary" class="action-btn">
+          <div class="action-btn__inner">
+            <ion-icon name="qr-code-outline"></ion-icon>
+            <span>Scan QR</span>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" fill="outline" color="primary" class="action-btn">
+          <div class="action-btn__inner">
+            <ion-icon name="list-outline"></ion-icon>
+            <span>All Assets</span>
+          </div>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Recent Activity -->
+  <div class="section-header">
+    <h3>Recent Activity</h3>
+    <ion-button fill="clear" size="small">View All</ion-button>
+  </div>
+  <ion-list lines="inset" class="recent-list">
+    @for (asset of recentAssets; track asset.id) {
+      <ion-item button detail="false">
+        <ion-icon name="cube-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>{{ asset.name }}</h3>
+          <p>{{ asset.id }} · {{ asset.category }}</p>
+          <ion-note class="timestamp">
+            <ion-icon name="time-outline"></ion-icon>
+            {{ asset.updatedAt | date:'MMM d, y' }}
+          </ion-note>
+        </ion-label>
+        <ion-badge slot="end" [color]="statusColor(asset.status)">
+          {{ asset.status }}
+        </ion-badge>
+      </ion-item>
+    }
+  </ion-list>
+
 </ion-content>
