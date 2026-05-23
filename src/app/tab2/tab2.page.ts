@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonSegment, IonSegmentButton, IonLabel,
-  IonList, IonItem, IonBadge, IonChip, IonIcon, IonButton,
+  IonList, IonItem, IonBadge, IonChip, IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowUpOutline, arrowDownOutline, cameraOutline, closeOutline } from 'ionicons/icons';
-import { Capacitor } from '@capacitor/core';
-import { CameraPreview } from '@capacitor-community/camera-preview';
+import { arrowUpOutline, arrowDownOutline } from 'ionicons/icons';
 
 type AttendanceStatus = 'present' | 'absent' | 'late' | 'leave' | 'half-day';
 
@@ -36,13 +34,12 @@ interface MonthData {
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonSegment, IonSegmentButton, IonLabel,
-    IonList, IonItem, IonBadge, IonChip, IonIcon, IonButton,
+    IonList, IonItem, IonBadge, IonChip, IonIcon,
   ],
 })
 export class Tab2Page {
 
   selectedMonth = 'current';
-  cameraActive  = false;
 
   months: Record<string, MonthData> = {
     current: {
@@ -110,35 +107,7 @@ export class Tab2Page {
     return { present: 'Present', absent: 'Absent', late: 'Late', leave: 'Leave', 'half-day': 'Half Day' }[status];
   }
 
-  async openCamera() {
-    if (!Capacitor.isNativePlatform()) return;
-
-    this.cameraActive = true;
-    await CameraPreview.start({
-      position: 'rear',
-      toBack: true,
-      enableOpacity: true,
-      disableAudio: true,
-      width: window.screen.width,
-      height: window.screen.height,
-      x: 0,
-      y: 0,
-    });
-  }
-
-  async onCapture() {
-    await CameraPreview.capture({ quality: 85 });
-    await CameraPreview.stop();
-    this.cameraActive = false;
-    // TODO: attach photo to record
-  }
-
-  async closeCamera() {
-    await CameraPreview.stop();
-    this.cameraActive = false;
-  }
-
   constructor() {
-    addIcons({ arrowUpOutline, arrowDownOutline, cameraOutline, closeOutline });
+    addIcons({ arrowUpOutline, arrowDownOutline });
   }
 }

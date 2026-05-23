@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" [class.transparent-bg]="cameraActive">
+<ion-content class="ion-padding">
 
   <!-- Today's attendance status card -->
   <ion-card class="status-card">
@@ -78,30 +78,28 @@
 
   </div>
 
-  <!-- ── In-app camera preview overlay ───────────────────── -->
+  <!-- ── Camera preview modal ─────────────────────────────── -->
   @if (cameraActive) {
     <div class="camera-overlay">
 
-      <div class="camera-header">
-        <button class="cam-icon-btn" (click)="onCameraCancel()">
-          <ion-icon name="close-outline"></ion-icon>
-        </button>
+      <div class="camera-preview-area">
+        <div class="camera-box"></div>
+      </div>
+
+      <div class="camera-controls-panel">
         <p class="camera-hint">
           {{ pendingAction === 'check-in' ? 'Check In — take a selfie' : 'Check Out — take a selfie' }}
         </p>
-        <button class="cam-icon-btn" (click)="onFlipCamera()">
-          <ion-icon name="camera-reverse-outline"></ion-icon>
-        </button>
-      </div>
-
-      <div class="camera-viewfinder">
-        <div class="face-guide"></div>
-      </div>
-
-      <div class="camera-footer">
-        <button class="shutter-btn" (click)="onCapture()">
-          <div class="shutter-inner"></div>
-        </button>
+        <div class="camera-actions">
+          <button class="cam-icon-btn" (click)="onFlipCamera()">
+            <ion-icon name="camera-reverse-outline"></ion-icon>
+          </button>
+          <button class="shutter-btn" (click)="onCapture()">
+            <div class="shutter-inner"></div>
+          </button>
+          <div style="width: 44px"></div>
+        </div>
+        <button class="cancel-btn" (click)="onCameraCancel()">Cancel</button>
       </div>
 
     </div>

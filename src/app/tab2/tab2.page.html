@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border" [style.visibility]="cameraActive ? 'hidden' : 'visible'">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Attendance</ion-title>
   </ion-toolbar>
@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [class.transparent-bg]="cameraActive">
+<ion-content>
 
   <!-- Month summary chips -->
   <div class="summary-row">
@@ -64,42 +64,16 @@
           }
         </ion-label>
 
-        <!-- Status badge + camera button on the right -->
+        <!-- Status badge on the right -->
         <div slot="end" class="record-end">
           <ion-badge class="status-badge status-badge--{{ record.status }}">
             {{ statusLabel(record.status) }}
           </ion-badge>
-          <ion-button fill="clear" size="small" color="medium" class="camera-btn" (click)="openCamera()">
-            <ion-icon name="camera-outline" slot="icon-only"></ion-icon>
-          </ion-button>
         </div>
 
       </ion-item>
 
     }
   </ion-list>
-
-  <!-- ── In-app camera preview overlay ───────────────────── -->
-  @if (cameraActive) {
-    <div class="camera-overlay">
-
-      <div class="camera-header">
-        <button class="cam-icon-btn" (click)="closeCamera()">
-          <ion-icon name="close-outline"></ion-icon>
-        </button>
-        <p class="camera-hint">Add a photo</p>
-        <div style="width: 44px"></div>
-      </div>
-
-      <div class="camera-viewfinder"></div>
-
-      <div class="camera-footer">
-        <button class="shutter-btn" (click)="onCapture()">
-          <div class="shutter-inner"></div>
-        </button>
-      </div>
-
-    </div>
-  }
 
 </ion-content>

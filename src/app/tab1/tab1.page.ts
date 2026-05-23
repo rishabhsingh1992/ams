@@ -11,9 +11,7 @@ import {
   notificationsOutline, checkmarkCircleOutline,
   closeOutline, cameraReverseOutline,
 } from 'ionicons/icons';
-import { Capacitor } from '@capacitor/core';
 import { CameraPreview } from '@capacitor-community/camera-preview';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 type CheckStatus = 'not-started' | 'checked-in' | 'checked-out';
 
@@ -90,25 +88,21 @@ export class Tab1Page implements OnInit {
   }
 
   private async startCamera() {
-    if (!Capacitor.isNativePlatform()) {
-      // Web fallback: open file/camera picker and skip preview UI
-      const ok = await this.webCapture();
-      if (ok) this.applyAction(this.nowFormatted());
-      else this.pendingAction = null;
-      return;
-    }
-
     this.cameraActive = true;
-    await CameraPreview.start({
-      position: 'front',
-      toBack: true,
-      enableOpacity: true,
-      disableAudio: true,
-      width: window.screen.width,
-      height: window.screen.height,
-      x: 0,
-      y: 0,
-    });
+    // Wait one frame for Angular to render the .camera-preview-area element
+    setTimeout(async () => {
+      const el = document.querySelector('.camera-preview-area') as HTMLElement;
+      const rect = el.getBoundingClientRect();
+      await CameraPreview.start({
+        position: 'front',
+        toBack: false,
+        disableAudio: true,
+        x: Math.round(rect.left),
+        y: Math.round(rect.top),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+      });
+    }, 50);
   }
 
   private applyAction(time: string) {
@@ -126,13 +120,6 @@ export class Tab1Page implements OnInit {
     }
     this.saveToStorage();
     this.pendingAction = null;
-  }
-
-  private async webCapture(): Promise<boolean> {
-    try {
-      await Camera.getPhoto({ quality: 70, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
-      return true;
-    } catch { return false; }
   }
 
   private loadFromStorage() {
