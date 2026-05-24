@@ -10,9 +10,10 @@ import { addIcons } from 'ionicons';
 import {
   logInOutline, logOutOutline,
   notificationsOutline, checkmarkCircleOutline,
-  timeOutline,
+  timeOutline, locationOutline, refreshOutline
 } from 'ionicons/icons';
 import { CameraPreviewComponent } from '../shared/components/camera-preview/camera-preview.component';
+import { Geolocation } from '@capacitor/geolocation';
 
 type CheckStatus = 'not-started' | 'checked-in' | 'checked-out';
 
@@ -47,6 +48,12 @@ export class Tab1Page implements OnInit {
   checkOutTime = '';
   hoursWorked  = '';
 
+  // Geolocation tracking state variables
+  latitude: number | null = null;
+  longitude: number | null = null;
+  isAcquiringLocation = false;
+  locationError: string | null = null;
+
   private pendingAction: 'check-in' | 'check-out' | null = null;
 
   get statusLabel(): string {
@@ -58,21 +65,34 @@ export class Tab1Page implements OnInit {
   }
 
   constructor() {
-    addIcons({ logInOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, timeOutline });
+    addIcons({ logInOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, timeOutline, locationOutline, refreshOutline });
   }
 
-  ngOnInit() { this.loadFromStorage(); }
+  ngOnInit() {
+    this.loadFromStorage();
+    this.acquireLocation(); // Automatically fetch location on load
+  }
 
   ionViewDidEnter() { this.cameraComp?.start(); }
 
   ionViewWillLeave() { this.cameraComp?.stop(); }
 
   onCheckIn() {
+    if (!this.latitude || !this.longitude) {
+      this.showToast('Precise GPS location is required before you can clock in.');
+      this.acquireLocation(); // Re-trigger location acquisition
+      return;
+    }
     this.pendingAction = 'check-in';
     this.cameraComp?.onCapture();
   }
 
   onCheckOut() {
+    if (!this.latitude || !this.longitude) {
+      this.showToast('Precise GPS location is required before you can clock out.');
+      this.acquireLocation(); // Re-trigger location acquisition
+      return;
+    }
     this.pendingAction = 'check-out';
     this.cameraComp?.onCapture();
   }
@@ -196,6 +216,77 @@ export class Tab1Page implements OnInit {
     // Compute total minutes since midnight
     const totalMinutes = (hours24 * 60) + minutes;
     return totalMinutes;
+  }
+
+  // Requests the current GPS coordinates of the device (Location is required before checking in/out)
+  async acquireLocation() {
+    this.isAcquiringLocation = true;
+    this.locationError = null;
+
+    try {
+      // 1. Check current Geolocation permission status
+      let permissions = await Geolocation.checkPermissions();
+
+      // If permissions are not granted or promptable, request them
+      if (permissions.location === 'prompt' || permissions.location === 'denied' || 
+          permissions.coarseLocation === 'prompt' || permissions.coarseLocation === 'denied') {
+        permissions = await Geolocation.requestPermissions({
+          permissions: ['location', 'coarseLocation']
+        });
+      }
+
+      // 2. Enforce precise location permission (Android 12+)
+      // If fine location (location) is not granted, but coarse (approximate) is, the user chose "Approximate"
+      if (permissions.location !== 'granted' && permissions.coarseLocation === 'granted') {
+        this.latitude = null;
+        this.longitude = null;
+        this.locationError = 'Approximate permission rejected';
+        this.isAcquiringLocation = false;
+        this.showToast('Precise location is required. Please enable "Precise" location in your device settings.');
+        return;
+      }
+
+      // If neither is granted, block completely
+      if (permissions.location !== 'granted' && permissions.coarseLocation !== 'granted') {
+        this.latitude = null;
+        this.longitude = null;
+        this.locationError = 'Permission denied';
+        this.isAcquiringLocation = false;
+        this.showToast('Location permission is required to Clock In/Out. Please grant location access.');
+        return;
+      }
+
+      // 3. Fetch current precise coordinates using hardware GPS (enableHighAccuracy: true)
+      const coordinates = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true, // Forces precise GPS hardware usage on the device
+        timeout: 10000 // Stop waiting after 10 seconds if GPS is slow
+      });
+      
+      const gpsAccuracy = coordinates.coords.accuracy;
+      const MAX_ACCURACY_LIMIT = 50; // Maximum allowed inaccuracy (in meters) for high precision GPS
+
+      // 4. Double check coordinate accuracy to filter out any remaining coarse/approximate cached readings
+      if (gpsAccuracy > MAX_ACCURACY_LIMIT) {
+        this.latitude = null;
+        this.longitude = null;
+        this.locationError = 'Approximate location rejected';
+        this.isAcquiringLocation = false;
+        this.showToast('Precise location is required. Please turn on Precise Location in system settings.');
+        return;
+      }
+      
+      this.latitude = coordinates.coords.latitude;
+      this.longitude = coordinates.coords.longitude;
+      this.isAcquiringLocation = false;
+    } catch (error) {
+      this.isAcquiringLocation = false;
+      this.locationError = 'Failed to get location';
+      this.latitude = null;
+      this.longitude = null;
+      
+      this.showToast('Precise location coordinates are required. Please enable GPS and allow location access.');
+      console.error('Error fetching GPS geolocation:', error);
+    }
   }
 
   private async showToast(message: string) {

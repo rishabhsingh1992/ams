@@ -74,6 +74,40 @@
     <!-- Inline camera preview -->
     <div class="camera-section">
       <app-camera-preview #camera (capture)="onCapture()"></app-camera-preview>
+
+      <!-- Beautiful GPS Overlay -->
+      @if (!camera.capturedImage) {
+        @if (isAcquiringLocation) {
+          <div class="gps-overlay gps-overlay--acquiring">
+            <div class="gps-overlay__content">
+              <ion-icon name="time-outline" class="gps-overlay__icon gps-overlay__icon--pulse"></ion-icon>
+              <h3 class="gps-overlay__title">Acquiring Location</h3>
+              <p class="gps-overlay__desc">Please wait while we establish a high-precision GPS lock.</p>
+              <div class="gps-overlay__shimmer-line"></div>
+            </div>
+          </div>
+        } @else if (locationError) {
+          <div class="gps-overlay gps-overlay--error" (click)="acquireLocation()">
+            <div class="gps-overlay__content">
+              <ion-icon name="location-outline" class="gps-overlay__icon gps-overlay__icon--error"></ion-icon>
+              <h3 class="gps-overlay__title">GPS Error</h3>
+              <p class="gps-overlay__desc">
+                {{ locationError === 'Approximate permission rejected' ? 'Approximate location rejected. Please enable "Precise Location" in device settings.' : 'High-precision GPS lock failed. Please enable location permissions.' }}
+              </p>
+              <button class="gps-overlay__retry-btn">
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Tap to Retry
+              </button>
+            </div>
+          </div>
+        } @else if (latitude && longitude) {
+          <!-- Elegant GPS Verified HUD Overlay -->
+          <div class="gps-verified-hud">
+            <span class="gps-verified-hud__dot"></span>
+            GPS Verified
+          </div>
+        }
+      }
     </div>
 
   </div>
@@ -83,16 +117,16 @@
 
   @if (!camera.capturedImage) {
     @if (checkStatus === 'not-started') {
-      <ion-button expand="block" color="primary" (click)="onCheckIn()">
+      <ion-button expand="block" color="primary" (click)="onCheckIn()" [disabled]="isAcquiringLocation || !latitude">
         <ion-icon name="log-in-outline" slot="start"></ion-icon>
-        Clock In
+        @if (isAcquiringLocation) { Acquiring GPS... } @else { Clock In }
       </ion-button>
     }
 
     @if (checkStatus === 'checked-in') {
-      <ion-button expand="block" color="danger" (click)="onCheckOut()">
+      <ion-button expand="block" color="danger" (click)="onCheckOut()" [disabled]="isAcquiringLocation || !latitude">
         <ion-icon name="log-out-outline" slot="start"></ion-icon>
-        Clock Out
+        @if (isAcquiringLocation) { Acquiring GPS... } @else { Clock Out }
       </ion-button>
     }
 
