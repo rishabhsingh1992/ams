@@ -33,7 +33,7 @@ export class CameraPreviewComponent implements OnDestroy {
       const rect = el.getBoundingClientRect();
       await CameraPreview.start({
         position: 'front',
-        toBack: false,
+        toBack: true,
         disableAudio: true,
         x: Math.round(rect.left),
         y: Math.round(rect.top),
@@ -75,36 +75,61 @@ export class CameraPreviewComponent implements OnDestroy {
     }
   }
 
-  // Rotate landscape captures to portrait and mirror for front-camera feel.
-  private normaliseImage(src: string): Promise<string> {
+  // Main method to normalize captured images (mirror front camera and fix landscape rotation)
+  private async normaliseImage(src: string): Promise<string> {
+    const img = await this.loadImageElement(src);
+    const canvas = document.createElement('canvas');
+    const isLandscape = img.width > img.height;
+
+    if (isLandscape) {
+      this.drawLandscapeImage(img, canvas);
+    } else {
+      this.drawPortraitImage(img, canvas);
+    }
+
+    const base64Result = canvas.toDataURL('image/jpeg', 0.85);
+    return base64Result;
+  }
+
+  // Helper function to asynchronously load an image source in a Promise
+  private loadImageElement(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve) => {
       const img = new Image();
-      img.onload = () => {
-        const landscape = img.width > img.height;
-        const canvas    = document.createElement('canvas');
-
-        if (landscape) {
-          // Raw capture is sideways — rotate -90° so portrait fills the frame
-          canvas.width  = img.height;
-          canvas.height = img.width;
-          const ctx = canvas.getContext('2d')!;
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.rotate(Math.PI / 2);
-          ctx.scale(-1, 1); // mirror simultaneously
-          ctx.drawImage(img, -img.width / 2, -img.height / 2);
-        } else {
-          canvas.width  = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d')!;
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.scale(-1, 1); // mirror only
-          ctx.drawImage(img, -img.width / 2, -img.height / 2);
-        }
-
-        resolve(canvas.toDataURL('image/jpeg', 0.85));
-      };
+      img.onload = () => resolve(img);
       img.src = src;
     });
+  }
+
+  // Helper function to process landscape captured image: rotate it by 90 degrees and mirror it
+  private drawLandscapeImage(img: HTMLImageElement, canvas: HTMLCanvasElement): void {
+    // Landscape captures are rotated sideways, so swap width and height
+    canvas.width = img.height;
+    canvas.height = img.width;
+
+    const ctx = canvas.getContext('2d')!;
+    
+    // Move origin (0,0) to center of canvas for rotation and scale operations
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(Math.PI / 2); // Rotate 90 degrees
+    ctx.scale(-1, 1);       // Mirror the image horizontally
+    
+    // Draw the image centered relative to the new origin
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
+  }
+
+  // Helper function to process portrait captured image: mirror it for a standard front-camera look
+  private drawPortraitImage(img: HTMLImageElement, canvas: HTMLCanvasElement): void {
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const ctx = canvas.getContext('2d')!;
+    
+    // Move origin (0,0) to center of canvas to mirror
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(-1, 1); // Mirror the image horizontally
+    
+    // Draw the image centered relative to the new origin
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
   }
 
   onConfirm() {
@@ -115,7 +140,10 @@ export class CameraPreviewComponent implements OnDestroy {
   async onRetake() {
     this.capturedImage = null;
     this.cdr.detectChanges();
-    await this.start();
+    // Yield to the browser repaint so the parent footer expands and camera container shrinks back first
+    setTimeout(async () => {
+      await this.start();
+    }, 150);
   }
 
   async ngOnDestroy() {

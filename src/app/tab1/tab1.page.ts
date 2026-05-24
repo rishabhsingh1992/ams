@@ -3,13 +3,14 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   IonHeader, IonToolbar, IonContent, IonFooter,
-  IonCard, IonCardContent, IonIcon, IonButton,
+  IonIcon, IonButton,
   ToastController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   logInOutline, logOutOutline,
   notificationsOutline, checkmarkCircleOutline,
+  timeOutline,
 } from 'ionicons/icons';
 import { CameraPreviewComponent } from '../shared/components/camera-preview/camera-preview.component';
 
@@ -31,7 +32,7 @@ interface TodayRecord {
   imports: [
     DatePipe,
     IonHeader, IonToolbar, IonContent, IonFooter,
-    IonCard, IonCardContent, IonIcon, IonButton,
+    IonIcon, IonButton,
     CameraPreviewComponent,
   ],
 })
@@ -57,7 +58,7 @@ export class Tab1Page implements OnInit {
   }
 
   constructor() {
-    addIcons({ logInOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline });
+    addIcons({ logInOutline, logOutOutline, notificationsOutline, checkmarkCircleOutline, timeOutline });
   }
 
   ngOnInit() { this.loadFromStorage(); }
@@ -128,25 +129,73 @@ export class Tab1Page implements OnInit {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
   }
 
+  // Returns the current time formatted as a friendly string (e.g. "09:30 AM")
   private nowFormatted(): string {
-    const d    = new Date();
-    const h    = d.getHours();
-    const m    = d.getMinutes();
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    const h12  = h % 12 || 12;
-    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+    const date = new Date();
+    const rawHours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Determine AM/PM
+    const ampm = rawHours >= 12 ? 'PM' : 'AM';
+
+    // Convert 24-hour time to 12-hour format
+    let hours12 = rawHours % 12;
+    if (hours12 === 0) {
+      hours12 = 12; // 0 hours in 12-hour format represents 12
+    }
+
+    // Add leading zeros if numbers are single digit (e.g., "9" becomes "09")
+    const formattedHours = String(hours12).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
 
+  // Calculates the total hours and minutes worked between Clock In and Clock Out
   private calcHours(inTime: string, outTime: string): string {
-    const toMin = (t: string) => {
-      const [hm, period] = t.split(' ');
-      const [h, m]       = hm.split(':').map(Number);
-      const h24 = period === 'PM' && h !== 12 ? h + 12 : period === 'AM' && h === 12 ? 0 : h;
-      return h24 * 60 + m;
-    };
-    const diff = toMin(outTime) - toMin(inTime);
-    if (diff <= 0) return '0h 0m';
-    return `${Math.floor(diff / 60)}h ${diff % 60}m`;
+    const startMinutes = this.convertTimeToMinutes(inTime);
+    const endMinutes = this.convertTimeToMinutes(outTime);
+    
+    const timeDifference = endMinutes - startMinutes;
+    
+    // If calculation goes negative or equals 0, return default placeholder
+    if (timeDifference <= 0) {
+      return '0h 0m';
+    }
+    
+    const hours = Math.floor(timeDifference / 60);
+    const minutes = timeDifference % 60;
+    
+    return `${hours}h ${minutes}m`;
+  }
+
+  // Helper function that parses a time string (e.g. "09:30 AM") and returns total minutes since midnight
+  private convertTimeToMinutes(timeString: string): number {
+    // Split time into [timePart, ampmPart] (e.g. "09:30" and "AM")
+    const parts = timeString.split(' ');
+    const timePart = parts[0];
+    const ampmPart = parts[1];
+
+    // Split hour and minute (e.g. "09" and "30")
+    const timeNumbers = timePart.split(':');
+    const hours = Number(timeNumbers[0]);
+    const minutes = Number(timeNumbers[1]);
+
+    // Convert hours to 24-hour format
+    let hours24 = hours;
+    if (ampmPart === 'PM') {
+      if (hours !== 12) {
+        hours24 = hours + 12; // Add 12 hours for PM times, unless it's 12 PM
+      }
+    } else if (ampmPart === 'AM') {
+      if (hours === 12) {
+        hours24 = 0; // 12 AM is midnight (0 hours in 24-hour format)
+      }
+    }
+
+    // Compute total minutes since midnight
+    const totalMinutes = (hours24 * 60) + minutes;
+    return totalMinutes;
   }
 
   private async showToast(message: string) {

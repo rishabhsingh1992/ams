@@ -15,44 +15,65 @@
 <ion-content>
   <div class="home-layout">
 
-    <!-- Today's attendance status card -->
-    <ion-card class="status-card">
-      <ion-card-content>
-
-        <!-- Date and status on the same row -->
-        <div class="card-header-row">
-          <p class="status-date">{{ today | date:'EEE, MMM d' }}</p>
-          <div class="status-pill"
-               [style.color]="statusColor"
-               [style.background]="statusColor + '18'">
-            <span class="live-dot" [style.background]="statusColor"></span>
-            {{ statusLabel }}
-          </div>
+    <!-- Today's attendance status card (ultra-minimal single-row redesign) -->
+    <div class="status-card-new">
+      <!-- Left side: Date & Live Status -->
+      <div class="card-left">
+        <p class="status-date">{{ today | date:'EEE, MMM d' }}</p>
+        <div class="status-badge-compact" [style.color]="statusColor">
+          <span class="live-status-dot" [style.background]="statusColor"></span>
+          {{ statusLabel }}
         </div>
+      </div>
 
-        <div class="time-row">
-          <div class="time-block">
-            <p class="time-block__label">Clock In</p>
-            <p class="time-block__value">{{ checkInTime  || '—' }}</p>
-          </div>
-          <div class="time-sep"></div>
-          <div class="time-block">
-            <p class="time-block__label">Clock Out</p>
-            <p class="time-block__value">{{ checkOutTime || '—' }}</p>
-          </div>
-          <div class="time-sep"></div>
-          <div class="time-block">
-            <p class="time-block__label">Hours</p>
-            <p class="time-block__value">{{ hoursWorked  || '—' }}</p>
-          </div>
-        </div>
+      <!-- Center Divider -->
+      <div class="card-center-divider"></div>
 
-      </ion-card-content>
-    </ion-card>
+      <!-- Right side: Dynamic details as per the attendance step -->
+      <div class="card-right">
+        @if (checkStatus === 'not-started') {
+          <div class="step-not-started">
+            <span class="step-not-started__icon">✨</span>
+            <span class="step-not-started__text">Tap Clock In to begin shift</span>
+          </div>
+        }
+
+        @if (checkStatus === 'checked-in') {
+          <div class="time-grid-minimal">
+            <div class="time-col">
+              <span class="time-col__label">Clocked In</span>
+              <span class="time-col__value">{{ checkInTime }}</span>
+            </div>
+            <div class="time-grid-sep"></div>
+            <div class="time-col">
+              <span class="time-col__label">Status</span>
+              <span class="time-col__value-badge">Active</span>
+            </div>
+          </div>
+        }
+
+        @if (checkStatus === 'checked-out') {
+          <div class="time-grid-minimal">
+            <div class="time-col">
+              <span class="time-col__label">In</span>
+              <span class="time-col__value">{{ checkInTime }}</span>
+            </div>
+            <div class="time-col">
+              <span class="time-col__label">Out</span>
+              <span class="time-col__value">{{ checkOutTime }}</span>
+            </div>
+            <div class="time-col">
+              <span class="time-col__label">Hours</span>
+              <span class="time-col__value highlight-blue">{{ hoursWorked }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
 
     <!-- Inline camera preview -->
     <div class="camera-section">
-      <app-camera-preview (capture)="onCapture()"></app-camera-preview>
+      <app-camera-preview #camera (capture)="onCapture()"></app-camera-preview>
     </div>
 
   </div>
@@ -60,25 +81,27 @@
 
 <ion-footer class="ion-no-border clock-footer-bar">
 
-  @if (checkStatus === 'not-started') {
-    <ion-button expand="block" color="primary" (click)="onCheckIn()">
-      <ion-icon name="log-in-outline" slot="start"></ion-icon>
-      Clock In
-    </ion-button>
-  }
+  @if (!camera.capturedImage) {
+    @if (checkStatus === 'not-started') {
+      <ion-button expand="block" color="primary" (click)="onCheckIn()">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        Clock In
+      </ion-button>
+    }
 
-  @if (checkStatus === 'checked-in') {
-    <ion-button expand="block" color="danger" (click)="onCheckOut()">
-      <ion-icon name="log-out-outline" slot="start"></ion-icon>
-      Clock Out
-    </ion-button>
-  }
+    @if (checkStatus === 'checked-in') {
+      <ion-button expand="block" color="danger" (click)="onCheckOut()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Clock Out
+      </ion-button>
+    }
 
-  @if (checkStatus === 'checked-out') {
-    <ion-button expand="block" color="medium" disabled>
-      <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-      Shift Complete
-    </ion-button>
+    @if (checkStatus === 'checked-out') {
+      <ion-button expand="block" color="medium" disabled>
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Shift Complete
+      </ion-button>
+    }
   }
 
 </ion-footer>

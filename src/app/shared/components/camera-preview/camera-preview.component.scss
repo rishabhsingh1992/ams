@@ -2,9 +2,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #111;
+  background: transparent;
 }
 
 // ── Live preview ──────────────────────────────────────────
@@ -46,12 +44,15 @@
   cursor: pointer;
   backdrop-filter: blur(8px);
   transition: background 0.2s, transform 0.1s;
+  z-index: 3;
 
   &:active {
     background: rgba(0, 0, 0, 0.65);
     transform: scale(0.92);
   }
 }
+
+
 
 .capture-flash {
   position: absolute;
@@ -77,20 +78,24 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, transparent 100%);
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  background: rgba(10, 11, 14, 0.78);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
+  z-index: 10;
 }
 
 .confirm-hint {
   margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.1px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .confirm-actions {
@@ -102,37 +107,82 @@
 .retake-btn,
 .confirm-btn {
   flex: 1;
-  height: 48px;
-  border-radius: 14px;
+  height: 50px;
+  border-radius: 16px;
   border: none;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   ion-icon { font-size: 18px; }
 
-  &:active { opacity: 0.8; transform: scale(0.97); }
+  &:active { transform: scale(0.97); }
 }
 
 .retake-btn {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(8px);
+  
+  &:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
 
 .confirm-btn {
-  background: var(--ion-color-primary);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, #50c8ff 100%);
   color: #fff;
+  box-shadow: 0 8px 24px rgba(56, 128, 255, 0.35);
 }
 
-// ── Keyframes ─────────────────────────────────────────────
+// ── Focus Corner Brackets & Center HUD ────────────────────
+
+.face-overlay-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.face-focus-box {
+  position: relative;
+  width: 210px;
+  height: 280px;
+  max-width: 65%;
+  max-height: 70%;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  box-sizing: border-box;
+}
+
+.bracket {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #ffffff;
+  border-style: solid;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  
+  &--tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+  &--tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+  &--bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+  &--br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+}
 
 @keyframes flash {
   from { opacity: 0.35; }
   to   { opacity: 0; }
 }
+
+
+

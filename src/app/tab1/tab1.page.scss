@@ -27,6 +27,7 @@ ion-toolbar { --background: var(--ion-background-color); }
 // ── Content layout ────────────────────────────────────────
 
 ion-content {
+  --background: transparent;
   --padding-top: 0;
   --padding-bottom: 0;
   --padding-start: 0;
@@ -40,24 +41,29 @@ ion-content {
   padding: 16px;
   box-sizing: border-box;
   gap: 16px;
+  background: var(--ion-background-color);
 }
 
-// ── Status Card ───────────────────────────────────────────
+// ── Status Card (Aesthetic Single-Row Redesign) ───────────
 
-.status-card {
-  margin: 0;
+.status-card-new {
+  background: var(--ion-card-background, #ffffff);
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
-
-  ion-card-content { padding: 14px 16px; }
-}
-
-.card-header-row {
+  padding: 12px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+  border: 1px solid rgba(0, 0, 0, 0.03);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 100px;
 }
 
 .status-date {
@@ -67,73 +73,172 @@ ion-content {
   color: var(--ion-color-medium);
 }
 
-.status-pill {
-  display: inline-flex;
+.status-badge-compact {
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
-.live-dot {
-  width: 7px;
-  height: 7px;
+.live-status-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+  animation: statusDotPulse 1.8s infinite;
+}
+
+@keyframes statusDotPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.card-center-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
 }
 
-.time-row {
+.card-right {
+  flex: 1;
   display: flex;
   align-items: center;
-  background: var(--ion-color-light);
-  border-radius: 12px;
-  padding: 10px 0;
+  justify-content: flex-end;
+  min-width: 0;
 }
 
-.time-block {
-  flex: 1;
-  text-align: center;
+.step-not-started {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  
+  &__icon {
+    font-size: 14px;
+    animation: emojiFloat 2s infinite ease-in-out;
+  }
+  
+  &__text {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ion-color-medium);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+}
 
+@keyframes emojiFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.15); }
+}
+
+.time-grid-minimal {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.time-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  
   &__label {
-    margin: 0 0 3px;
     font-size: 9px;
     font-weight: 600;
     color: var(--ion-color-medium);
     text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
   }
-
+  
   &__value {
-    margin: 0;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--ion-color-dark);
+    
+    &.highlight-blue {
+      color: var(--ion-color-primary) !important;
+      font-weight: 800;
+    }
+  }
+  
+  &__value-badge {
+    background: rgba(45, 211, 111, 0.1);
+    color: #2dd36f;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 8px rgba(45, 211, 111, 0.12);
+    animation: activeBadgePulse 2s infinite ease-in-out;
   }
 }
 
-.time-sep {
-  width: 1px;
-  height: 26px;
-  background: var(--ion-color-light-shade);
+@keyframes activeBadgePulse {
+  0%, 100% { opacity: 0.85; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1.04); }
 }
 
-// ── Inline Camera Section ─────────────────────────────────
+.time-grid-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+// ── Inline Camera Section (Aesthetic bezel & shadow) ─────
 
 .camera-section {
   flex: 1;
   min-height: 0;
-  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.16), 0 6px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  app-camera-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-// ── Clock Footer ──────────────────────────────────────────
+// ── Clock Footer (Premium responsive buttons) ─────────────
 
 .clock-footer-bar {
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
   background: var(--ion-background-color);
-
-  ion-button { --border-radius: 14px; height: 54px; font-size: 16px; font-weight: 700; }
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  
+  ion-button {
+    --border-radius: 16px;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+    margin: 0;
+    box-shadow: 0 8px 24px rgba(56, 128, 255, 0.2);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &[color="danger"] {
+      box-shadow: 0 8px 24px rgba(235, 68, 90, 0.2);
+    }
+    
+    &:active {
+      transform: scale(0.97);
+    }
+  }
 }
