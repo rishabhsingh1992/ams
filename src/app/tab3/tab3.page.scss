@@ -91,6 +91,7 @@ ion-toolbar { --background: var(--ion-background-color); }
 
   &--blue   { background: #3880FF18; ion-icon { color: #3880FF; } }
   &--purple { background: #5260FF18; ion-icon { color: #5260FF; } }
+  &--teal   { background: #14B8A618; ion-icon { color: #14B8A6; } }
   &--gray   { background: var(--ion-color-light); ion-icon { color: var(--ion-color-medium); } }
 }
 
@@ -106,6 +107,17 @@ ion-toolbar { --background: var(--ion-background-color); }
   font-size: 14px;
   font-weight: 500;
   color: var(--ion-color-dark);
+}
+
+// ── Theme select ──────────────────────────────────────────
+
+.theme-select {
+  --placeholder-color: var(--ion-color-medium);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  max-width: 130px;
+  text-align: right;
 }
 
 // ── Log Out ───────────────────────────────────────────────

@@ -106,6 +106,33 @@
 
   </ion-list>
 
+  <!-- ── Appearance ───────────────────────────────────────── -->
+  <p class="section-label">Appearance</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon [name]="themeIcon()"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Dark Mode</p>
+        <span class="info-value">{{ themeLabel() }}</span>
+      </ion-label>
+      <ion-select
+        slot="end"
+        interface="action-sheet"
+        [value]="theme.mode()"
+        (ionChange)="onThemeChange($event.detail.value)"
+        aria-label="Dark Mode"
+        class="theme-select">
+        <ion-select-option value="system">System Default</ion-select-option>
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
   <!-- ── Account ───────────────────────────────────────────── -->
   <p class="section-label">Account</p>
   <ion-list lines="none" class="info-list">
