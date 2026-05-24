@@ -21,37 +21,69 @@
 
       <div class="record-card record-card--{{ record.status }}">
 
-        <!-- Header row: date + badge -->
-        <div class="card-header">
-          <div class="card-date">
-            <span class="card-date__day">{{ record.day }}</span>
-            <span class="card-date__num">{{ record.date }}</span>
+        <!-- Top row: Date + Hours + Status Chip -->
+        <div class="card-top-bar">
+          <div class="card-date-info">
+            <span class="card-date-day">{{ record.day }}</span>
+            <span class="card-date-num">{{ record.date }}</span>
           </div>
-          <ion-badge class="status-badge status-badge--{{ record.status }}">
-            {{ record.hours === 'Active' ? 'Active' : statusLabel(record.status) }}
-          </ion-badge>
+
+          <div class="card-top-right">
+            @if (record.checkIn && record.hours) {
+              <span class="card-duration-pill" [class.card-duration-pill--active]="record.hours === 'Active'">
+                {{ record.hours }}
+              </span>
+            }
+            <span class="status-chip status-chip--{{ record.status }}">
+              {{ record.hours === 'Active' ? 'Active' : statusLabel(record.status) }}
+            </span>
+          </div>
         </div>
 
-        <!-- Times row -->
+        <!-- Edge-to-edge subtle divider -->
+        <div class="card-divider"></div>
+
+        <!-- Shift Grid (Clock In & Clock Out Side-by-Side) -->
         @if (record.checkIn) {
-          <div class="card-times">
-            <div class="time-col">
-              <p class="time-col__label">Clock In</p>
-              <p class="time-col__value time-col__value--in">{{ record.checkIn }}</p>
+          <div class="card-shift-grid">
+            <!-- Left Column: Clock In details -->
+            <div class="shift-col">
+              <span class="shift-col__label shift-col__label--in">Clock In</span>
+              <span class="shift-col__time">{{ record.checkIn }}</span>
+              @if (record.checkInLocation) {
+                <span class="shift-col__address">{{ record.checkInLocation }}</span>
+              }
             </div>
-            <div class="time-divider"></div>
-            <div class="time-col">
-              <p class="time-col__label">Clock Out</p>
-              <p class="time-col__value time-col__value--out">{{ record.checkOut || '—' }}</p>
-            </div>
-            <div class="time-divider"></div>
-            <div class="time-col">
-              <p class="time-col__label">Hours</p>
-              <p class="time-col__value">{{ record.hours }}</p>
+
+            <!-- Vertical column divider -->
+            <div class="shift-col-divider"></div>
+
+            <!-- Right Column: Clock Out details -->
+            <div class="shift-col">
+              <span class="shift-col__label shift-col__label--out">Clock Out</span>
+              <span class="shift-col__time" [class.shift-col__time--pending]="!record.checkOut">
+                {{ record.checkOut || '—' }}
+              </span>
+              @if (record.checkOut) {
+                @if (record.checkOutLocation) {
+                  <span class="shift-col__address">{{ record.checkOutLocation }}</span>
+                }
+              } @else if (record.hours === 'Active') {
+                <span class="shift-col__active-status">
+                  <span class="active-dot"></span>
+                  Active Now
+                </span>
+              } @else {
+                <span class="shift-col__address shift-col__address--pending">No checkout logged</span>
+              }
             </div>
           </div>
         } @else {
-          <p class="card-empty">{{ record.status === 'leave' ? 'On Leave' : 'No attendance recorded' }}</p>
+          <div class="card-empty-state">
+            <span class="empty-text">
+              {{ record.status === 'leave' ? 'On Scheduled Leave' : 'Absent • No attendance recorded' }}
+            </span>
+          </div>
         }
 
       </div>
