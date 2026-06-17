@@ -1,0 +1,63 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Leave Balances</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <p class="section-label">FY 2025–26 Balances</p>
+
+  <!-- ── Balance grid ───────────────────────────────────── -->
+  <div class="leave-grid">
+    @for (leave of leaves; track leave.label) {
+      <div class="leave-card leave-card--{{ leave.color }}">
+        <ion-icon [name]="leave.icon" class="leave-card-icon"></ion-icon>
+        <div class="leave-remaining">{{ leave.remaining }}</div>
+        <div class="leave-label">{{ leave.label }}</div>
+        <div class="leave-used">{{ leave.used }} used of {{ leave.total }}</div>
+        <div class="leave-bar">
+          <div class="leave-bar-fill" [style.width.%]="(leave.used / leave.total) * 100"></div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ── Policy ─────────────────────────────────────────── -->
+  <p class="section-label">Leave Policy</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item">
+      <ion-label>
+        <p class="info-label">Earned Leave accrual</p>
+        <span class="info-value">2 days per month</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <ion-label>
+        <p class="info-label">Sick Leave</p>
+        <span class="info-value">1 day per month · non-carryover</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <ion-label>
+        <p class="info-label">Casual Leave</p>
+        <span class="info-value">8 days per year · non-carryover</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item" lines="none">
+      <ion-label>
+        <p class="info-label">Encashment</p>
+        <span class="info-value">Earned Leave encashable up to 15 days</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

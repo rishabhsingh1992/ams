@@ -1,0 +1,283 @@
+// ── Host ──────────────────────────────────────────────────────────────────────
+
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+// ── Backdrop ──────────────────────────────────────────────────────────────────
+
+.au-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+// ── Sheet ─────────────────────────────────────────────────────────────────────
+
+.au-sheet {
+  position: relative;
+  z-index: 1;
+  background: var(--ion-background-color, #0f1117);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  max-height: 92dvh;
+  animation: sheetSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+// ── Handle ────────────────────────────────────────────────────────────────────
+
+.au-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+  align-self: center;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.au-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 20px 4px;
+  flex-shrink: 0;
+}
+
+.au-title {
+  margin: 0 0 3px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-text-color, #fff);
+  letter-spacing: -0.3px;
+}
+
+.au-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.au-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+
+  &:active { background: rgba(255, 255, 255, 0.15); }
+}
+
+// ── Scrollable form area ──────────────────────────────────────────────────────
+
+.au-form {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+// ── Field ─────────────────────────────────────────────────────────────────────
+
+.au-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &--error {
+    .au-input-wrap { border-color: #FF3B30; }
+    .au-label      { color: #FF3B30; }
+  }
+}
+
+.au-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.15s;
+}
+
+.au-required {
+  color: #FF3B30;
+  margin-left: 2px;
+}
+
+.au-error-msg {
+  font-size: 11px;
+  color: #FF3B30;
+  padding-left: 2px;
+}
+
+// ── Input wrap ────────────────────────────────────────────────────────────────
+
+.au-input-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0 14px;
+  height: 52px;
+  gap: 10px;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: var(--ion-color-primary, #3880ff);
+    background: rgba(56, 128, 255, 0.06);
+  }
+
+  &--select { position: relative; }
+}
+
+.au-input-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.au-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--ion-text-color, #fff);
+  min-width: 0;
+
+  &::placeholder { color: rgba(255, 255, 255, 0.25); }
+}
+
+// ── Select ────────────────────────────────────────────────────────────────────
+
+.au-select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--ion-text-color, #fff);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  min-width: 0;
+
+  option {
+    background: var(--ion-background-color, #0f1117);
+    color: var(--ion-text-color, #fff);
+  }
+
+  &:invalid,
+  &:has(option[value=""]:checked) { color: rgba(255, 255, 255, 0.25); }
+}
+
+.au-select-chevron {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+// ── Role pill grid ────────────────────────────────────────────────────────────
+
+.au-role-grid {
+  display: flex;
+  gap: 8px;
+}
+
+.au-role-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+
+  &:active { transform: scale(0.96); }
+
+  &--selected {
+    border-color: var(--ion-color-primary, #3880ff);
+    background: rgba(56, 128, 255, 0.12);
+    color: var(--ion-color-primary, #3880ff);
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+
+.au-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 20px calc(20px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.au-btn {
+  flex: 1;
+  height: 52px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:active { transform: scale(0.97); }
+
+  &--ghost {
+    flex: 0 0 auto;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    &:active { background: rgba(255, 255, 255, 0.14); }
+  }
+
+  &--primary {
+    background: linear-gradient(135deg, var(--ion-color-primary, #3880ff) 0%, #50c8ff 100%);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(56, 128, 255, 0.35);
+  }
+
+  &--disabled {
+    opacity: 0.45;
+    box-shadow: none;
+  }
+}
+
+// ── Entry animation ───────────────────────────────────────────────────────────
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1;   }
+}

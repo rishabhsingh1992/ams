@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Bank Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Primary Account ───────────────────────────────── -->
+  <p class="section-label">Primary Account</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon name="business-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Bank</p>
+        <span class="info-value">HDFC Bank</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon name="card-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Account Number</p>
+        <span class="info-value">**** **** **** 1234</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon name="code-slash-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">IFSC Code</p>
+        <span class="info-value">HDFC0001234</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Account Type</p>
+        <span class="info-value">Savings</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── UPI ───────────────────────────────────────────── -->
+  <p class="section-label">UPI</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--purple" slot="start">
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">UPI ID</p>
+        <span class="info-value">rishabh&#64;hdfcbank</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Note ──────────────────────────────────────────── -->
+  <div class="info-note">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    To update bank details, raise a request with HR.
+  </div>
+
+</ion-content>

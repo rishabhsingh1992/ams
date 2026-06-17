@@ -1,0 +1,142 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-fab slot="fixed" vertical="top" horizontal="end">
+  <ion-fab-button size="small" (click)="goSettings()">
+    <ion-icon name="settings-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <div class="profile-hero">
+    <div class="avatar">RS</div>
+    <h2 class="profile-name">Rishabh Singh</h2>
+    <p class="profile-role">Software Engineer</p>
+    <span class="profile-status">Active</span>
+  </div>
+
+  <!-- ── My Profile ───────────────────────────────────────── -->
+  <p class="section-label">My Profile</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item nav-item" button detail (click)="goPersonal()">
+      <div class="info-icon info-icon--blue" slot="start">
+        <ion-icon name="person-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Personal Details</span>
+        <p class="info-label">Name, contact, date of birth</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail (click)="goSalary()">
+      <div class="info-icon info-icon--green" slot="start">
+        <ion-icon name="cash-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Salary Details</span>
+        <p class="info-label">CTC, payslips, deductions</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail (click)="goBank()">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon name="card-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Bank Details</span>
+        <p class="info-label">Account number, IFSC, UPI</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail (click)="goLeave()">
+      <div class="info-icon info-icon--orange" slot="start">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Leave Balances</span>
+        <p class="info-label">Earned, sick, casual &amp; comp-off</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail (click)="goDocuments()">
+      <div class="info-icon info-icon--purple" slot="start">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Documents</span>
+        <p class="info-label">Offer letter, ID proof, certificates</p>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Appearance ───────────────────────────────────────── -->
+  <p class="section-label">Appearance</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon [name]="themeIcon()"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Dark Mode</p>
+        <span class="info-value">{{ themeLabel() }}</span>
+      </ion-label>
+      <ion-select
+        slot="end"
+        interface="action-sheet"
+        [value]="theme.mode()"
+        (ionChange)="onThemeChange($event.detail.value)"
+        aria-label="Dark Mode"
+        class="theme-select">
+        <ion-select-option value="system">System Default</ion-select-option>
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Account ───────────────────────────────────────────── -->
+  <p class="section-label">Account</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--gray" slot="start">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Notifications</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="notificationsEnabled"
+                  (ionChange)="notificationsEnabled = $event.detail.checked">
+      </ion-toggle>
+    </ion-item>
+
+    <ion-item class="info-item" lines="none" button detail>
+      <div class="info-icon info-icon--gray" slot="start">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Change Password</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Log Out ───────────────────────────────────────────── -->
+  <div class="logout-wrap">
+    <ion-button expand="block" fill="outline" color="danger">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Log Out
+    </ion-button>
+  </div>
+
+</ion-content>

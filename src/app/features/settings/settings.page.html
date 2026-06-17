@@ -1,0 +1,170 @@
+﻿<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Admin ──────────────────────────────────────────────── -->
+  <p class="section-label">Admin</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail lines="none" (click)="goAttendanceSettings()">
+      <div class="settings-icon settings-icon--danger" slot="start">
+        <ion-icon name="time-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Attendance Settings</p>
+        <span class="settings-desc">Shift times, rules, check-in policy</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ General â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <p class="section-label">General</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail (click)="goReports()">
+      <div class="settings-icon settings-icon--blue" slot="start">
+        <ion-icon name="bar-chart-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Reports</p>
+        <span class="settings-desc">View attendance and leave reports</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" lines="none">
+      <div class="settings-icon settings-icon--teal" slot="start">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Notifications</p>
+        <span class="settings-desc">Push alerts for check-in reminders</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="notificationsEnabled"
+                  (ionChange)="notificationsEnabled = $event.detail.checked">
+      </ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ Appearance â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <p class="section-label">Appearance</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button lines="none" (click)="cyclTheme()">
+      <div class="settings-icon settings-icon--purple" slot="start">
+        <ion-icon [name]="themeIcon()"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Theme</p>
+        <span class="settings-desc">{{ themeLabel() }}</span>
+      </ion-label>
+      <ion-icon name="chevron-forward-outline" slot="end" class="chevron"></ion-icon>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ Security â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <p class="section-label">Security</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--orange" slot="start">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Change Password</p>
+        <span class="settings-desc">Update your login credentials</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" lines="none">
+      <div class="settings-icon settings-icon--orange" slot="start">
+        <ion-icon name="finger-print-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Biometric Login</p>
+        <span class="settings-desc">Use fingerprint or face ID</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="biometricsEnabled"
+                  (ionChange)="biometricsEnabled = $event.detail.checked">
+      </ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ Privacy â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <p class="section-label">Privacy & Legal</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--green" slot="start">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Privacy Policy</p>
+        <span class="settings-desc">How we handle your data</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail lines="none">
+      <div class="settings-icon settings-icon--green" slot="start">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Terms of Service</p>
+        <span class="settings-desc">Usage terms and conditions</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ About â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <p class="section-label">About</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--gray" slot="start">
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">App Version</p>
+        <span class="settings-desc">1.0.0</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail lines="none">
+      <div class="settings-icon settings-icon--gray" slot="start">
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Help & Support</p>
+        <span class="settings-desc">FAQs and contact options</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- â"€â"€ Log Out â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <div class="logout-wrap">
+    <ion-item class="settings-item settings-item--danger" button lines="none" (click)="logout()">
+      <div class="settings-icon settings-icon--danger" slot="start">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name settings-name--danger">Log Out</p>
+      </ion-label>
+    </ion-item>
+  </div>
+
+</ion-content>
+

@@ -1,0 +1,195 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/settings" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Attendance Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="admin-badge">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    Admin only — changes apply organisation-wide
+  </div>
+
+  <!-- ── Work Schedule ─────────────────────────────────────── -->
+  <p class="section-label">Work Schedule</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--blue" slot="start">
+        <ion-icon name="time-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Shift Start</p>
+        <span class="settings-desc">{{ shiftStart }}</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--blue" slot="start">
+        <ion-icon name="time-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Shift End</p>
+        <span class="settings-desc">{{ shiftEnd }}</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail lines="none">
+      <div class="settings-icon settings-icon--blue" slot="start">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Working Days</p>
+        <span class="settings-desc">{{ workingDays }}</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Attendance Rules ──────────────────────────────────── -->
+  <p class="section-label">Attendance Rules</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--orange" slot="start">
+        <ion-icon name="timer-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Late Grace Period</p>
+        <span class="settings-desc">{{ gracePeriod }} after shift start</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail>
+      <div class="settings-icon settings-icon--orange" slot="start">
+        <ion-icon name="stopwatch-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Half-day Threshold</p>
+        <span class="settings-desc">Less than {{ halfDayThreshold }} counts as half-day</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="settings-item" button detail lines="none">
+      <div class="settings-icon settings-icon--orange" slot="start">
+        <ion-icon name="trending-up-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Overtime After</p>
+        <span class="settings-desc">{{ overtimeAfter }} of work</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Check-in Policy ──────────────────────────────────── -->
+  <p class="section-label">Check-in Policy</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item">
+      <div class="settings-icon settings-icon--teal" slot="start">
+        <ion-icon name="location-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">GPS Verification</p>
+        <span class="settings-desc">Require location on check-in</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="gpsRequired()"
+                  (ionChange)="gpsRequired.set($event.detail.checked)">
+      </ion-toggle>
+    </ion-item>
+
+    <ion-item class="settings-item">
+      <div class="settings-icon settings-icon--teal" slot="start">
+        <ion-icon name="camera-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Selfie Required</p>
+        <span class="settings-desc">Capture selfie at check-in</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="selfieRequired()"
+                  (ionChange)="selfieRequired.set($event.detail.checked)">
+      </ion-toggle>
+    </ion-item>
+
+    <ion-item class="settings-item" [class.settings-item--no-border]="!geofenceEnabled()">
+      <div class="settings-icon settings-icon--teal" slot="start">
+        <ion-icon name="scan-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Geo-fence</p>
+        <span class="settings-desc">Restrict check-in to office area</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="geofenceEnabled()"
+                  (ionChange)="geofenceEnabled.set($event.detail.checked)">
+      </ion-toggle>
+    </ion-item>
+
+    @if (geofenceEnabled()) {
+      <ion-item class="settings-item" button detail lines="none">
+        <div class="settings-icon settings-icon--teal" slot="start">
+          <ion-icon name="scan-outline"></ion-icon>
+        </div>
+        <ion-label>
+          <p class="settings-name">Office Radius</p>
+          <span class="settings-desc">{{ officeRadius }} from office pin</span>
+        </ion-label>
+      </ion-item>
+    }
+
+  </ion-list>
+
+  <!-- ── Auto Actions ──────────────────────────────────────── -->
+  <p class="section-label">Auto Actions</p>
+  <ion-list lines="none" class="settings-list">
+
+    <ion-item class="settings-item">
+      <div class="settings-icon settings-icon--purple" slot="start">
+        <ion-icon name="power-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Auto Checkout</p>
+        <span class="settings-desc">Force checkout at day-end if missed</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="autoCheckout()"
+                  (ionChange)="autoCheckout.set($event.detail.checked)">
+      </ion-toggle>
+    </ion-item>
+
+    @if (autoCheckout()) {
+      <ion-item class="settings-item" button detail>
+        <div class="settings-icon settings-icon--purple" slot="start">
+          <ion-icon name="time-outline"></ion-icon>
+        </div>
+        <ion-label>
+          <p class="settings-name">Auto Checkout Time</p>
+          <span class="settings-desc">{{ autoCheckoutTime }}</span>
+        </ion-label>
+      </ion-item>
+    }
+
+    <ion-item class="settings-item" lines="none">
+      <div class="settings-icon settings-icon--purple" slot="start">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="settings-name">Auto-mark Absent</p>
+        <span class="settings-desc">Mark absent if no check-in by noon</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="autoMarkAbsent()"
+                  (ionChange)="autoMarkAbsent.set($event.detail.checked)">
+      </ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

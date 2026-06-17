@@ -1,0 +1,208 @@
+// ── Host: full-screen overlay container ──────────────────────────────────────
+
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+// ── Backdrop ─────────────────────────────────────────────────────────────────
+
+.rp-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+// ── Bottom sheet ─────────────────────────────────────────────────────────────
+
+.rp-sheet {
+  position: relative;
+  z-index: 1;
+  background: var(--ion-background-color, #0f1117);
+  border-radius: 24px 24px 0 0;
+  padding: 12px 20px calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.45);
+  animation: sheetSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+// ── Drag handle ──────────────────────────────────────────────────────────────
+
+.rp-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+  align-self: center;
+  margin-bottom: 4px;
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+
+.rp-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rp-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-text-color, #fff);
+  letter-spacing: -0.3px;
+}
+
+.rp-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+// ── Role cards ───────────────────────────────────────────────────────────────
+
+.rp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rp-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s, transform 0.1s;
+
+  &:active {
+    transform: scale(0.985);
+  }
+
+  &--selected {
+    border-color: var(--ion-color-primary, #3880ff);
+    background: rgba(56, 128, 255, 0.1);
+
+    .rp-card__icon-wrap {
+      background: var(--ion-color-primary, #3880ff);
+      color: #fff;
+    }
+  }
+}
+
+.rp-card__icon-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ion-color-primary, #3880ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.rp-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rp-card__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ion-text-color, #fff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rp-card__desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.4;
+}
+
+.rp-card__check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  svg { width: 100%; height: 100%; display: block; }
+
+  &--visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ── Footer buttons ────────────────────────────────────────────────────────────
+
+.rp-footer {
+  display: flex;
+  gap: 10px;
+}
+
+.rp-btn {
+  flex: 1;
+  height: 52px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:active { transform: scale(0.97); }
+
+  &--ghost {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    flex: 0 0 auto;
+    padding: 0 20px;
+
+    &:active { background: rgba(255, 255, 255, 0.14); }
+  }
+
+  &--primary {
+    background: linear-gradient(135deg, var(--ion-color-primary, #3880ff) 0%, #50c8ff 100%);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(56, 128, 255, 0.35);
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
+  }
+}
+
+// ── Entry animation ───────────────────────────────────────────────────────────
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
