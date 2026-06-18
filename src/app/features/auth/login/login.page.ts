@@ -7,6 +7,7 @@ import {
 import { addIcons } from 'ionicons';
 import { phonePortraitOutline, arrowForwardOutline } from 'ionicons/icons';
 import { AuthService } from '@core/services/auth.service';
+import { UserService } from '@core/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,16 +16,18 @@ import { AuthService } from '@core/services/auth.service';
   imports: [FormsModule, IonContent, IonInput, IonButton, IonIcon, IonNote],
 })
 export class LoginPage {
-  private auth   = inject(AuthService);
-  private router = inject(Router);
+  private auth        = inject(AuthService);
+  private router      = inject(Router);
+  private userService = inject(UserService);
 
   phone    = '';
   errorMsg = '';
 
   constructor() {
     addIcons({ phonePortraitOutline, arrowForwardOutline });
+    this.userService.restoreSeed();
     if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/tabs/home'], { replaceUrl: true });
+      this.router.navigate([this.homeRoute()], { replaceUrl: true });
     }
   }
 
@@ -38,6 +41,13 @@ export class LoginPage {
       this.errorMsg = 'Phone number not recognised. Please try again.';
       return;
     }
-    this.router.navigate(['/tabs/home'], { replaceUrl: true });
+    this.router.navigate([this.homeRoute()], { replaceUrl: true });
+  }
+
+  private homeRoute(): string {
+    const role = this.auth.currentUser()?.role;
+    if (role === 'admin')   return '/tabs/dashboard';
+    if (role === 'manager') return '/tabs/manager-home';
+    return '/tabs/home';
   }
 }

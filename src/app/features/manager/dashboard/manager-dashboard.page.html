@@ -1,0 +1,94 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Greeting ─────────────────────────────────────────── -->
+  <div class="greeting">
+    <div>
+      <p class="greeting-sub">{{ today | date:'EEEE, d MMMM' }}</p>
+      <h2 class="greeting-title">Good morning, {{ auth.currentUser()?.name?.split(' ')[0] }}</h2>
+    </div>
+    <div class="greeting-badge">Manager</div>
+  </div>
+
+  <!-- ── Team stats ────────────────────────────────────────── -->
+  <div class="stats-row">
+    <div class="stat-card stat-card--green">
+      <span class="stat-value">{{ teamStats.present }}</span>
+      <span class="stat-label">Present</span>
+    </div>
+    <div class="stat-card stat-card--orange">
+      <span class="stat-value">{{ teamStats.late }}</span>
+      <span class="stat-label">Late</span>
+    </div>
+    <div class="stat-card stat-card--red">
+      <span class="stat-value">{{ teamStats.absent }}</span>
+      <span class="stat-label">Absent</span>
+    </div>
+    <div class="stat-card stat-card--gray">
+      <span class="stat-value">{{ teamStats.total }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+  </div>
+
+  <!-- ── Pending approvals banner ──────────────────────────── -->
+  @if (pendingApprovals > 0) {
+    <button class="approvals-banner" (click)="goApprovals()">
+      <div class="approvals-left">
+        <div class="approvals-icon">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div>
+          <p class="approvals-title">{{ pendingApprovals }} Leave Requests</p>
+          <p class="approvals-sub">Pending your approval</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="approvals-chevron"></ion-icon>
+    </button>
+  }
+
+  <!-- ── Team members ───────────────────────────────────────── -->
+  <p class="section-label">Team Today</p>
+  <div class="team-card">
+    @for (member of teamMembers; track member.name) {
+      <div class="member-row">
+        <div class="avatar">{{ member.name[0] }}</div>
+        <div class="member-info">
+          <p class="member-name">{{ member.name }}</p>
+          <p class="member-role">{{ member.role }}</p>
+        </div>
+        <div class="member-right">
+          <span class="status-badge status-badge--{{ member.status }}">{{ statusLabel(member.status) }}</span>
+          @if (member.checkInTime !== '—') {
+            <p class="check-time">{{ member.checkInTime }}</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ── Quick actions ─────────────────────────────────────── -->
+  <p class="section-label">Quick Actions</p>
+  <div class="actions-row">
+    <button class="action-btn" (click)="goTeam()">
+      <div class="action-icon action-icon--blue">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <span>Team View</span>
+    </button>
+    <button class="action-btn" (click)="goApprovals()">
+      <div class="action-icon action-icon--teal">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <span>Approvals</span>
+      @if (pendingApprovals > 0) {
+        <span class="action-badge">{{ pendingApprovals }}</span>
+      }
+    </button>
+  </div>
+
+</ion-content>

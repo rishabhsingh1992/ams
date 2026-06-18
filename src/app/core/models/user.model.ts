@@ -1,4 +1,5 @@
-export type UserRole = 'employee' | 'manager' | 'admin';
+export type UserRole   = 'employee' | 'manager' | 'admin';
+export type UserStatus = 'active' | 'inactive';
 
 export interface CurrentUser {
   phone: string;
@@ -20,4 +21,10 @@ export interface NewUser {
   employeeId: string;
   department: string;
   role:       UserRole;
+}
+
+export interface User extends NewUser {
+  id:       string;
+  status:   UserStatus;
+  joinedAt: string;
 }

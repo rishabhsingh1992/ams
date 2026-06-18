@@ -1,0 +1,92 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/users" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="au-form">
+
+    <div class="au-field" [class.au-field--error]="fieldError(form.fullName)">
+      <label class="au-label">Full Name <span class="au-required">*</span></label>
+      <div class="au-input-wrap">
+        <ion-icon name="person-outline" class="au-input-icon"></ion-icon>
+        <input class="au-input" type="text" placeholder="e.g. Rahul Sharma"
+               [(ngModel)]="form.fullName" name="fullName" autocomplete="name" />
+      </div>
+      @if (fieldError(form.fullName)) {
+        <span class="au-error-msg">Full name is required</span>
+      }
+    </div>
+
+    <div class="au-field" [class.au-field--error]="fieldError(form.email)">
+      <label class="au-label">Email <span class="au-required">*</span></label>
+      <div class="au-input-wrap">
+        <ion-icon name="mail-outline" class="au-input-icon"></ion-icon>
+        <input class="au-input" type="email" placeholder="rahul@company.com"
+               [(ngModel)]="form.email" name="email" autocomplete="email" inputmode="email" />
+      </div>
+      @if (fieldError(form.email)) {
+        <span class="au-error-msg">Email is required</span>
+      }
+    </div>
+
+    <div class="au-field">
+      <label class="au-label">Phone</label>
+      <div class="au-input-wrap">
+        <ion-icon name="call-outline" class="au-input-icon"></ion-icon>
+        <input class="au-input" type="tel" placeholder="+91 98765 43210"
+               [(ngModel)]="form.phone" name="phone" autocomplete="tel" inputmode="tel" />
+      </div>
+    </div>
+
+    <div class="au-field">
+      <label class="au-label">Employee ID</label>
+      <div class="au-input-wrap">
+        <ion-icon name="id-card-outline" class="au-input-icon"></ion-icon>
+        <input class="au-input" type="text" placeholder="e.g. EMP-2024-043"
+               [(ngModel)]="form.employeeId" name="employeeId" />
+      </div>
+    </div>
+
+    <div class="au-field" [class.au-field--error]="touched && !form.department">
+      <label class="au-label">Department <span class="au-required">*</span></label>
+      <div class="au-input-wrap au-input-wrap--select">
+        <ion-icon name="business-outline" class="au-input-icon"></ion-icon>
+        <select class="au-select" [(ngModel)]="form.department" name="department">
+          <option value="" disabled>Select department</option>
+          @for (dept of departments; track dept) {
+            <option [value]="dept">{{ dept }}</option>
+          }
+        </select>
+        <ion-icon name="chevron-down-outline" class="au-select-chevron"></ion-icon>
+      </div>
+      @if (touched && !form.department) {
+        <span class="au-error-msg">Department is required</span>
+      }
+    </div>
+
+    <div class="au-field">
+      <label class="au-label">Role <span class="au-required">*</span></label>
+      <div class="au-role-grid">
+        @for (r of roles; track r.value) {
+          <button type="button" class="au-role-btn" [class.au-role-btn--selected]="form.role === r.value"
+                  (click)="form.role = r.value">
+            {{ r.label }}
+          </button>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <div class="au-footer">
+    <button class="au-btn au-btn--primary" [class.au-btn--disabled]="!isValid && touched"
+            type="button" (click)="submit()">
+      Add User
+    </button>
+  </div>
+</ion-content>

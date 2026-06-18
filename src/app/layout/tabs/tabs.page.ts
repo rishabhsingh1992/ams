@@ -1,7 +1,11 @@
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component, EnvironmentInjector, computed, inject } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { gridOutline, fingerPrintOutline, calendarOutline, personOutline } from 'ionicons/icons';
+import {
+  gridOutline, fingerPrintOutline, personOutline,
+  peopleOutline, documentTextOutline, personAddOutline,
+} from 'ionicons/icons';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-tabs',
@@ -11,8 +15,21 @@ import { gridOutline, fingerPrintOutline, calendarOutline, personOutline } from 
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
+  readonly auth = inject(AuthService);
+
+  readonly homeTab = computed(() => {
+    const role = this.auth.currentUser()?.role;
+    if (role === 'admin')   return 'dashboard';
+    if (role === 'manager') return 'manager-home';
+    return 'home';
+  });
+
+  readonly homeHref = computed(() => `/tabs/${this.homeTab()}`);
 
   constructor() {
-    addIcons({ gridOutline, fingerPrintOutline, calendarOutline, personOutline });
+    addIcons({
+      gridOutline, fingerPrintOutline, personOutline,
+      peopleOutline, documentTextOutline, personAddOutline,
+    });
   }
 }

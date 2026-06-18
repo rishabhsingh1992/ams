@@ -15,7 +15,6 @@ A mobile-first attendance tracking app built with **Angular 20**, **Ionic 8**, a
 | Styling | SCSS + Ionic CSS custom properties |
 | State | Angular signals + localStorage |
 | Linting | ESLint + angular-eslint |
-| Testing | Karma + Jasmine |
 
 ---
 
@@ -32,6 +31,51 @@ A mobile-first attendance tracking app built with **Angular 20**, **Ionic 8**, a
 | Settings page | Done |
 | Role selection dialog component | Done |
 | Add user dialog component | Done |
+
+---
+
+## Screens by Role
+
+### Common — All Roles
+
+| Screen | Route | Notes |
+|---|---|---|
+| Login | `/auth/login` | Email + password, JWT |
+| Forgot Password | `/auth/forgot-password` | OTP / reset link |
+| Home / Dashboard | `/tabs/home` | Role-aware summary cards |
+| Profile | `/tabs/profile` | View own info, theme toggle |
+| Edit Profile | `/tabs/profile/edit` | Change name, avatar, password |
+| Settings | `/tabs/settings` | Notifications, biometrics, theme, about |
+
+### Employee
+
+| Screen | Route | Notes |
+|---|---|---|
+| Mark Attendance | `/tabs/home` | GPS check-in/out + front-camera selfie |
+| Attendance History | `/tabs/attendance/history` | Calendar + list, reverse-geocoded location |
+| Attendance Day Detail | `/tabs/attendance/:date` | Single-day drill-down (in/out times, map) |
+| Apply Leave | `/tabs/leave/apply` | Date range picker, leave type, reason |
+| My Leaves | `/tabs/leave/list` | Status-badged leave list |
+| Leave Detail | `/tabs/leave/:id` | Full request info + cancel option |
+
+### Manager *(all Employee screens, plus)*
+
+| Screen | Route | Notes |
+|---|---|---|
+| Team Attendance | `/tabs/team` | Daily/weekly grid of team presence |
+| Approval Queue | `/tabs/team/approvals` | Pending leave requests |
+| Approve / Reject Leave | `/tabs/team/approvals/:id` | Review with comment |
+
+### Admin *(all Manager screens, plus)*
+
+| Screen | Route | Notes |
+|---|---|---|
+| User Management | `/admin/users` | List, search, filter by department/role |
+| Add User | `/admin/users/add` | Full user form (name, email, role, dept) |
+| Edit User | `/admin/users/:id/edit` | Update role, department, status |
+| Attendance Report | `/tabs/reports/attendance` | Filters + chart + CSV/PDF export |
+| Leave Report | `/tabs/reports/leave` | Balance summary + leave breakdown |
+| Team Report | `/tabs/reports/team` | Cross-team presence/absence analytics |
 
 ---
 
@@ -136,7 +180,6 @@ ionic capacitor open ios       # Xcode
 | `npm start` | Dev server at `http://localhost:8100` |
 | `npm run build` | Production build to `/www` |
 | `npm run watch` | Dev build with file watching |
-| `npm test` | Unit tests via Karma |
 | `npm run lint` | ESLint check |
 
 ---
@@ -191,5 +234,5 @@ Full-featured camera preview with front-camera flip, selfie capture, orientation
 ## Contributing
 
 1. Branch from `main` using `feature/<slug>` or `fix/<slug>`.
-2. Run `npm run lint` and `npm test` before opening a PR.
+2. Run `npm run lint` before opening a PR.
 3. Keep commits atomic and descriptive (conventional commits preferred).

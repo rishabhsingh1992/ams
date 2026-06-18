@@ -14,6 +14,7 @@ import {
   settingsOutline,
 } from 'ionicons/icons';
 import { ThemeService, ThemeMode } from '@core/services/theme.service';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -28,7 +29,8 @@ import { ThemeService, ThemeMode } from '@core/services/theme.service';
 })
 export class ProfilePage {
   readonly theme  = inject(ThemeService);
-  private  router = inject(Router);
+  private readonly auth   = inject(AuthService);
+  private readonly router = inject(Router);
   notificationsEnabled = true;
 
   readonly themeIcon = computed(() => ({
@@ -54,6 +56,11 @@ export class ProfilePage {
 
   onThemeChange(mode: ThemeMode): void {
     this.theme.setMode(mode);
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/auth/login'], { replaceUrl: true });
   }
 
   goSettings(): void { this.router.navigate(['/tabs/settings']); }

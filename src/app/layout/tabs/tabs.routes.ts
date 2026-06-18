@@ -15,6 +15,17 @@ export const routes: Routes = [
           import('@features/home/home.page').then((m) => m.HomePage),
       },
       {
+        path: 'dashboard',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('@features/admin/dashboard/dashboard.page').then((m) => m.AdminDashboardPage),
+      },
+      {
+        path: 'manager-home',
+        loadComponent: () =>
+          import('@features/manager/dashboard/manager-dashboard.page').then((m) => m.ManagerDashboardPage),
+      },
+      {
         path: 'attendance',
         loadComponent: () =>
           import('@features/attendance/attendance.page').then((m) => m.AttendancePage),
@@ -78,15 +89,33 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'users',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('@features/admin/users/users.page').then((m) => m.UsersPage),
+      },
+      {
+        path: 'users/add',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('@features/admin/add-user/add-user.page').then((m) => m.AddUserPage),
+      },
+      {
+        path: 'users/:id/edit',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('@features/admin/edit-user/edit-user.page').then((m) => m.EditUserPage),
+      },
+      {
         path: '',
-        redirectTo: '/tabs/home',
+        redirectTo: '/tabs/profile',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/home',
+    redirectTo: '/tabs/profile',
     pathMatch: 'full',
   },
 ];

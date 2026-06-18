@@ -1,0 +1,153 @@
+ion-toolbar { --background: var(--ion-background-color); }
+
+ion-searchbar {
+  --background: var(--ion-background-color);
+  --box-shadow: none;
+  --border-radius: 14px;
+  padding: 8px 12px 0;
+}
+
+// ── Filter chips ──────────────────────────────────────────
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.chip {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(var(--ion-text-color-rgb, 0,0,0), 0.1);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+  transition: all 0.18s;
+
+  &--active {
+    border-color: var(--ion-color-primary);
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+    color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+}
+
+// ── Count label ───────────────────────────────────────────
+
+.count-label {
+  margin: 12px 16px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ── User list ─────────────────────────────────────────────
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 12px 100px;
+}
+
+// ── User card ─────────────────────────────────────────────
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--ion-background-color);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &--inactive { opacity: 0.5; }
+}
+
+// ── Avatar ────────────────────────────────────────────────
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+
+  &--employee { background: #3880FF18; color: #3880FF; }
+  &--manager  { background: #FF990018; color: #FF9900; }
+  &--admin    { background: #FF3B3018; color: #FF3B30; }
+}
+
+// ── User info ─────────────────────────────────────────────
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Role badge ────────────────────────────────────────────
+
+.role-badge {
+  margin-top: 4px;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &--employee { background: #3880FF18; color: #3880FF; }
+  &--manager  { background: #FF990018; color: #FF9900; }
+  &--admin    { background: #FF3B3018; color: #FF3B30; }
+}
+
+// ── Empty state ───────────────────────────────────────────
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 0;
+  color: var(--ion-color-medium);
+
+  ion-icon { font-size: 48px; }
+  p { margin: 0; font-size: 14px; }
+}

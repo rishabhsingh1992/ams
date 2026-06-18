@@ -4,8 +4,9 @@ import { CurrentUser, UserRole } from '@core/models/user.model';
 const STORAGE_KEY = 'ams_user';
 
 const MOCK_USERS: Record<string, CurrentUser> = {
-  '0000': { phone: '0000', role: 'admin',    name: 'Admin User'    },
-  '4444': { phone: '4444', role: 'employee', name: 'Rishabh Singh' },
+  '1000': { phone: '1000', role: 'admin',    name: 'Arjun Mehta'   },
+  '2000': { phone: '2000', role: 'manager',  name: 'Priya Sharma'  },
+  '3000': { phone: '3000', role: 'employee', name: 'Rishabh Singh' },
 };
 
 @Injectable({ providedIn: 'root' })
@@ -26,7 +27,7 @@ export class AuthService {
 
   logout(): void {
     this._user.set(null);
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.clear();
   }
 
   private loadFromStorage(): CurrentUser | null {
