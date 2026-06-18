@@ -10,7 +10,7 @@
   <div class="greeting">
     <div>
       <p class="greeting-sub">{{ today | date:'EEEE, d MMMM' }}</p>
-      <h2 class="greeting-title">Good morning, {{ auth.currentUser()?.name?.split(' ')[0] }}</h2>
+      <h2 class="greeting-title">Good morning, {{ auth.currentUser()?.name?.split(' ')?.[0] }}</h2>
     </div>
     <div class="greeting-badge">Manager</div>
   </div>
