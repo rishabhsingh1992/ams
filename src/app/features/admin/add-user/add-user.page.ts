@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -24,6 +25,7 @@ import { NewUser, UserRole } from '@core/models/user.model';
 export class AddUserPage {
   private readonly userService = inject(UserService);
   private readonly router      = inject(Router);
+  private readonly modalCtrl   = inject(ModalController);
 
   readonly departments = [
     'Engineering', 'Human Resources', 'Finance',
@@ -55,10 +57,15 @@ export class AddUserPage {
     return this.touched && !value.trim();
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     this.touched = true;
     if (!this.isValid) return;
     this.userService.addUser(this.form);
-    this.router.navigate(['/tabs/users']);
+    const modal = await this.modalCtrl.getTop();
+    if (modal) {
+      await modal.dismiss({ added: true });
+    } else {
+      this.router.navigate(['/tabs/users']);
+    }
   }
 }

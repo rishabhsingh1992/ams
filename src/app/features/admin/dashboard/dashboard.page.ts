@@ -1,17 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NavController, ModalController } from '@ionic/angular/standalone';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   peopleOutline, personAddOutline, documentTextOutline,
-  settingsOutline, timeOutline, checkmarkCircleOutline,
-  closeCircleOutline, alertCircleOutline, calendarOutline,
+  timeOutline, checkmarkCircleOutline, closeCircleOutline,
+  alertCircleOutline, calendarOutline, timerOutline,
+  walletOutline, megaphoneOutline,
 } from 'ionicons/icons';
 import { AuthService } from '@core/services/auth.service';
 import { UserService } from '@core/services/user.service';
+import { ToastService } from '@core/services/toast.service';
+import { AddUserPage } from '@features/admin/add-user/add-user.page';
 
 interface ActivityItem {
   name:   string;
@@ -26,6 +29,14 @@ interface DeptStat {
   total:   number;
 }
 
+interface Shortcut {
+  icon:   string;
+  label:  string;
+  color:  'blue' | 'orange' | 'purple' | 'green' | 'teal' | 'red';
+  action: 'add-user' | 'attendance-settings' | 'coming-soon';
+  soon?:  true;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
@@ -33,9 +44,11 @@ interface DeptStat {
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, DatePipe],
 })
 export class AdminDashboardPage {
-  private readonly router = inject(Router);
-  readonly auth           = inject(AuthService);
-  readonly userService    = inject(UserService);
+  private readonly nav       = inject(NavController);
+  private readonly modalCtrl = inject(ModalController);
+  private readonly toast     = inject(ToastService);
+  readonly auth              = inject(AuthService);
+  readonly userService       = inject(UserService);
 
   readonly today = new Date();
 
@@ -81,15 +94,32 @@ export class AdminDashboardPage {
     return `${Math.round((stat.present / stat.total) * 100)}%`;
   }
 
+  readonly shortcuts: Shortcut[] = [
+    { icon: 'person-add-outline',       label: 'Add User',   color: 'blue',   action: 'add-user'             },
+    { icon: 'timer-outline',            label: 'Work Rules', color: 'orange', action: 'attendance-settings'  },
+    { icon: 'checkmark-circle-outline', label: 'Approvals',  color: 'purple', action: 'coming-soon', soon: true },
+    { icon: 'wallet-outline',           label: 'Payroll',    color: 'green',  action: 'coming-soon', soon: true },
+    { icon: 'calendar-outline',         label: 'Schedule',   color: 'teal',   action: 'coming-soon', soon: true },
+    { icon: 'megaphone-outline',        label: 'Announce',   color: 'red',    action: 'coming-soon', soon: true },
+  ];
+
   constructor() {
     addIcons({
-      peopleOutline, personAddOutline, documentTextOutline, settingsOutline,
+      peopleOutline, personAddOutline, documentTextOutline,
       timeOutline, checkmarkCircleOutline, closeCircleOutline,
-      alertCircleOutline, calendarOutline,
+      alertCircleOutline, calendarOutline, timerOutline,
+      walletOutline, megaphoneOutline,
     });
   }
 
-  goUsers():    void { this.router.navigate(['/tabs/users']);               }
-  goReports():  void { this.router.navigate(['/tabs/reports']);             }
-  goSettings(): void { this.router.navigate(['/tabs/attendance-settings']); }
+  async runShortcut(s: Shortcut): Promise<void> {
+    if (s.action === 'add-user') {
+      const modal = await this.modalCtrl.create({ component: AddUserPage });
+      await modal.present();
+    } else if (s.action === 'attendance-settings') {
+      this.nav.navigateForward('/tabs/attendance-settings');
+    } else {
+      this.toast.info('Coming soon');
+    }
+  }
 }

@@ -56,13 +56,13 @@
   <div class="team-card">
     @for (member of teamMembers; track member.name) {
       <div class="member-row">
-        <div class="avatar">{{ member.name[0] }}</div>
+        <app-avatar [name]="member.name"></app-avatar>
         <div class="member-info">
           <p class="member-name">{{ member.name }}</p>
           <p class="member-role">{{ member.role }}</p>
         </div>
         <div class="member-right">
-          <span class="status-badge status-badge--{{ member.status }}">{{ statusLabel(member.status) }}</span>
+          <app-status-badge [status]="member.status" [label]="statusLabel(member.status)"></app-status-badge>
           @if (member.checkInTime !== '—') {
             <p class="check-time">{{ member.checkInTime }}</p>
           }

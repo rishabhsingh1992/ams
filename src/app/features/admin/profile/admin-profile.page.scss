@@ -1,0 +1,211 @@
+ion-toolbar { --background: var(--ion-background-color); }
+
+// ── Hero ──────────────────────────────────────────────────
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 24px;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #FF3B30;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 20px rgba(255, 59, 48, 0.30);
+}
+
+.profile-name {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+.profile-sub {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.owner-badge {
+  padding: 3px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #FF3B3018;
+  color: #FF3B30;
+  border: 1px solid #FF3B3030;
+}
+
+// ── Section label ─────────────────────────────────────────
+
+.section-label {
+  margin: 4px 16px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+// ── Org card ──────────────────────────────────────────────
+
+.org-card {
+  margin: 0 12px 20px;
+  padding: 6px 16px 4px;
+  border-radius: 16px;
+  background: var(--ion-background-color);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.org-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 0;
+
+  & + & { border-top: 1px solid rgba(var(--ion-text-color-rgb), 0.06); }
+}
+
+.org-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon { font-size: 18px; }
+
+  &--blue   { background: #3880FF18; ion-icon { color: #3880FF; } }
+  &--purple { background: #5260FF18; ion-icon { color: #5260FF; } }
+  &--teal   { background: #14B8A618; ion-icon { color: #14B8A6; } }
+  &--orange { background: #FF990018; ion-icon { color: #FF9900; } }
+  &--green  { background: #2DD36F18; ion-icon { color: #1a9e4f; } }
+}
+
+.org-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.org-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+.org-label {
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+.plan-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 10px;
+  border-top: 1px solid rgba(var(--ion-text-color-rgb), 0.06);
+}
+
+.plan-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+.plan-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #3880FF18;
+  color: #3880FF;
+  border: 1px solid #3880FF30;
+}
+
+// ── Info list card ────────────────────────────────────────
+
+.info-list {
+  margin: 0 12px 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  background: var(--ion-background-color);
+}
+
+.info-item {
+  --background: var(--ion-background-color);
+  --padding-start: 0;
+  --inner-padding-end: 16px;
+  --min-height: 60px;
+}
+
+.info-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 12px 0 16px;
+  flex-shrink: 0;
+
+  ion-icon { font-size: 18px; }
+
+  &--blue   { background: #3880FF18; ion-icon { color: #3880FF; } }
+  &--orange { background: #FF990018; ion-icon { color: #CC7700; } }
+  &--purple { background: #5260FF18; ion-icon { color: #5260FF; } }
+  &--teal   { background: #14B8A618; ion-icon { color: #14B8A6; } }
+  &--gray   { background: var(--ion-color-light); ion-icon { color: var(--ion-color-medium); } }
+}
+
+.nav-item {
+  --min-height: 66px;
+
+  .info-value { display: block; margin-bottom: 2px; }
+  .info-label { margin: 0; }
+}
+
+.info-label {
+  margin: 0 0 2px;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+// ── Theme select ──────────────────────────────────────────
+
+.theme-select {
+  --placeholder-color: var(--ion-color-medium);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  max-width: 130px;
+  text-align: right;
+}
+
+// ── Logout ────────────────────────────────────────────────
+
+.logout-wrap {
+  padding: 4px 12px 48px;
+
+  ion-button { --border-radius: 14px; height: 50px; font-size: 15px; font-weight: 600; }
+}

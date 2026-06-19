@@ -14,9 +14,9 @@
 
   <!-- ── Hero ──────────────────────────────────────────────── -->
   <div class="profile-hero">
-    <div class="avatar">RS</div>
-    <h2 class="profile-name">Rishabh Singh</h2>
-    <p class="profile-role">Software Engineer</p>
+    <div class="avatar">{{ initials() }}</div>
+    <h2 class="profile-name">{{ auth.currentUser()?.name }}</h2>
+    <p class="profile-role">{{ roleLabel() }}</p>
     <span class="profile-status">Active</span>
   </div>
 

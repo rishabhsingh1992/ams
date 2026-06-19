@@ -74,27 +74,20 @@
     }
   </div>
 
-  <!-- ── Quick actions ─────────────────────────────────────── -->
-  <p class="section-label">Quick Actions</p>
-  <div class="actions-row">
-    <button class="action-btn" (click)="goUsers()">
-      <div class="action-icon action-icon--blue">
-        <ion-icon name="person-add-outline"></ion-icon>
-      </div>
-      <span>Users</span>
-    </button>
-    <button class="action-btn" (click)="goReports()">
-      <div class="action-icon action-icon--purple">
-        <ion-icon name="document-text-outline"></ion-icon>
-      </div>
-      <span>Reports</span>
-    </button>
-    <button class="action-btn" (click)="goSettings()">
-      <div class="action-icon action-icon--orange">
-        <ion-icon name="settings-outline"></ion-icon>
-      </div>
-      <span>Settings</span>
-    </button>
+  <!-- ── Shortcuts ────────────────────────────────────────── -->
+  <p class="section-label">Shortcuts</p>
+  <div class="shortcuts-grid">
+    @for (s of shortcuts; track s.label) {
+      <button class="shortcut-btn" [class.shortcut-btn--soon]="s.soon" (click)="runShortcut(s)">
+        <div class="shortcut-icon shortcut-icon--{{ s.color }}">
+          <ion-icon [name]="s.icon"></ion-icon>
+        </div>
+        @if (s.soon) {
+          <span class="soon-badge">Soon</span>
+        }
+        <span class="shortcut-label">{{ s.label }}</span>
+      </button>
+    }
   </div>
 
 </ion-content>

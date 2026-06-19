@@ -1,0 +1,8 @@
+@if (loading()) {
+  <div class="loader-wrap">
+    <ion-spinner name="crescent"></ion-spinner>
+    @if (message()) {
+      <p class="loader-message">{{ message() }}</p>
+    }
+  </div>
+}
