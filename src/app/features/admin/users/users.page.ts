@@ -5,9 +5,11 @@ import {
   IonSearchbar, IonFab, IonFabButton, IonIcon, IonToggle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, personOutline } from 'ionicons/icons';
+import { addOutline } from 'ionicons/icons';
 import { UserService } from '@core/services/user.service';
 import { UserRole } from '@core/models/user.model';
+import { AvatarComponent } from '@shared/components/avatar/avatar.component';
+import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 
 type FilterRole = UserRole | 'all';
 
@@ -18,6 +20,7 @@ type FilterRole = UserRole | 'all';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonSearchbar, IonFab, IonFabButton, IonIcon, IonToggle,
+    AvatarComponent, EmptyStateComponent,
   ],
 })
 export class UsersPage {
@@ -47,11 +50,7 @@ export class UsersPage {
     });
   });
 
-  constructor() { addIcons({ addOutline, personOutline }); }
-
-  initials(name: string): string {
-    return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
-  }
+  constructor() { addIcons({ addOutline }); }
 
   toggleStatus(id: string, event: Event): void {
     event.stopPropagation();

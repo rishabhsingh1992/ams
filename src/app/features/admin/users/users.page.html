@@ -26,7 +26,7 @@
   <div class="user-list">
     @for (user of filtered(); track user.id) {
       <div class="user-card" [class.user-card--inactive]="user.status === 'inactive'" (click)="openEdit(user.id)">
-        <div class="avatar avatar--{{ user.role }}">{{ initials(user.fullName) }}</div>
+        <app-avatar [name]="user.fullName" [role]="user.role" size="lg"></app-avatar>
         <div class="user-info">
           <p class="user-name">{{ user.fullName }}</p>
           <p class="user-meta">{{ user.employeeId }} · {{ user.department }}</p>
@@ -38,10 +38,7 @@
         </ion-toggle>
       </div>
     } @empty {
-      <div class="empty-state">
-        <ion-icon name="person-outline"></ion-icon>
-        <p>No users found</p>
-      </div>
+      <app-empty-state icon="person-outline" message="No users found"></app-empty-state>
     }
   </div>
 

@@ -44,6 +44,10 @@ export class LoginPage {
     this.router.navigate([this.homeRoute()], { replaceUrl: true });
   }
 
+  forgotPassword() {
+    this.router.navigate(['/auth/forgot-password']);
+  }
+
   private homeRoute(): string {
     const role = this.auth.currentUser()?.role;
     if (role === 'admin')   return '/tabs/dashboard';

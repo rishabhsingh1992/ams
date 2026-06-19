@@ -1,0 +1,184 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <div class="profile-hero">
+    <div class="avatar">{{ initials() }}</div>
+    <h2 class="profile-name">{{ auth.currentUser()?.name }}</h2>
+    <p class="profile-sub">Administrator · Owner</p>
+    <span class="owner-badge">Owner</span>
+  </div>
+
+  <!-- ── Organization ──────────────────────────────────────── -->
+  <p class="section-label">Organization</p>
+  <div class="org-card">
+
+    <div class="org-row">
+      <div class="org-icon org-icon--blue">
+        <ion-icon name="business-outline"></ion-icon>
+      </div>
+      <div class="org-info">
+        <span class="org-value">{{ org.name }}</span>
+        <span class="org-label">Company</span>
+      </div>
+    </div>
+
+    <div class="org-row">
+      <div class="org-icon org-icon--purple">
+        <ion-icon name="ribbon-outline"></ion-icon>
+      </div>
+      <div class="org-info">
+        <span class="org-value">{{ org.industry }}</span>
+        <span class="org-label">Industry</span>
+      </div>
+    </div>
+
+    <div class="org-row">
+      <div class="org-icon org-icon--teal">
+        <ion-icon name="location-outline"></ion-icon>
+      </div>
+      <div class="org-info">
+        <span class="org-value">{{ org.location }}</span>
+        <span class="org-label">Location</span>
+      </div>
+    </div>
+
+    <div class="org-row">
+      <div class="org-icon org-icon--orange">
+        <ion-icon name="people-outline"></ion-icon>
+      </div>
+      <div class="org-info">
+        <span class="org-value">{{ userService.users().length }} Employees</span>
+        <span class="org-label">Team Size</span>
+      </div>
+    </div>
+
+    <div class="org-row">
+      <div class="org-icon org-icon--green">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <div class="org-info">
+        <span class="org-value">Est. {{ org.founded }}</span>
+        <span class="org-label">Founded</span>
+      </div>
+    </div>
+
+    <div class="plan-row">
+      <span class="plan-label">Current Plan</span>
+      <span class="plan-badge">{{ org.plan }}</span>
+    </div>
+
+  </div>
+
+  <!-- ── My Account ────────────────────────────────────────── -->
+  <p class="section-label">My Account</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item nav-item" button detail (click)="goPersonal()">
+      <div class="info-icon info-icon--blue" slot="start">
+        <ion-icon name="person-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Personal Details</span>
+        <p class="info-label">Name, contact, date of birth</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail lines="none" (click)="comingSoon()">
+      <div class="info-icon info-icon--gray" slot="start">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Change Password</span>
+        <p class="info-label">Update login credentials</p>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Administration ────────────────────────────────────── -->
+  <p class="section-label">Administration</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item nav-item" button detail (click)="goAttendanceRules()">
+      <div class="info-icon info-icon--orange" slot="start">
+        <ion-icon name="timer-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Attendance Rules</span>
+        <p class="info-label">Work hours, check-in policy</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item nav-item" button detail lines="none" (click)="comingSoon()">
+      <div class="info-icon info-icon--purple" slot="start">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Roles & Permissions</span>
+        <p class="info-label">Manage access levels</p>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Appearance ────────────────────────────────────────── -->
+  <p class="section-label">Appearance</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--teal" slot="start">
+        <ion-icon [name]="themeIcon()"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Dark Mode</p>
+        <span class="info-value">{{ themeLabel() }}</span>
+      </ion-label>
+      <ion-select
+        slot="end"
+        interface="action-sheet"
+        [value]="theme.mode()"
+        (ionChange)="onThemeChange($event.detail.value)"
+        aria-label="Dark Mode"
+        class="theme-select">
+        <ion-select-option value="system">System Default</ion-select-option>
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Account ───────────────────────────────────────────── -->
+  <p class="section-label">Account</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--gray" slot="start">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <span class="info-value">Notifications</span>
+      </ion-label>
+      <ion-toggle slot="end"
+                  [checked]="notificationsEnabled"
+                  (ionChange)="notificationsEnabled = $event.detail.checked">
+      </ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Logout ─────────────────────────────────────────────── -->
+  <div class="logout-wrap">
+    <ion-button expand="block" fill="outline" color="danger" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Log Out
+    </ion-button>
+  </div>
+
+</ion-content>

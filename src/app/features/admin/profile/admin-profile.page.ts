@@ -1,36 +1,41 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular/standalone';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonIcon,
   IonToggle, IonButton, IonSelect, IonSelectOption,
-  IonFab, IonFabButton,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  personOutline, cashOutline, cardOutline, calendarOutline,
-  documentTextOutline, notificationsOutline, lockClosedOutline,
+  personOutline, businessOutline, peopleOutline, timerOutline,
+  shieldCheckmarkOutline, notificationsOutline, lockClosedOutline,
   logOutOutline, moonOutline, sunnyOutline, phonePortraitOutline,
-  settingsOutline,
+  ribbonOutline, locationOutline, calendarOutline,
 } from 'ionicons/icons';
-import { ThemeService, ThemeMode } from '@core/services/theme.service';
 import { AuthService } from '@core/services/auth.service';
+import { UserService } from '@core/services/user.service';
+import { ThemeService, ThemeMode } from '@core/services/theme.service';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: 'profile.page.html',
-  styleUrls: ['profile.page.scss'],
+  selector: 'app-admin-profile',
+  templateUrl: 'admin-profile.page.html',
+  styleUrls:  ['admin-profile.page.scss'],
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonIcon,
     IonToggle, IonButton, IonSelect, IonSelectOption,
-    IonFab, IonFabButton,
   ],
 })
-export class ProfilePage {
-  readonly theme   = inject(ThemeService);
-  readonly auth    = inject(AuthService);
+export class AdminProfilePage {
+  private readonly nav    = inject(NavController);
   private readonly router = inject(Router);
+  private readonly toast  = inject(ToastService);
+  readonly auth           = inject(AuthService);
+  readonly userService    = inject(UserService);
+  readonly theme          = inject(ThemeService);
+
   notificationsEnabled = true;
 
   readonly initials = computed(() => {
@@ -38,11 +43,13 @@ export class ProfilePage {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   });
 
-  readonly roleLabel = computed(() => ({
-    employee: 'Employee',
-    manager:  'Manager',
-    admin:    'Administrator',
-  }[this.auth.currentUser()?.role ?? 'employee']));
+  readonly org = {
+    name:     'Acme Technologies Pvt. Ltd.',
+    industry: 'Information Technology',
+    location: 'Bengaluru, Karnataka',
+    founded:  '2018',
+    plan:     'Professional',
+  };
 
   readonly themeIcon = computed(() => ({
     system: 'phone-portrait-outline',
@@ -58,10 +65,10 @@ export class ProfilePage {
 
   constructor() {
     addIcons({
-      personOutline, cashOutline, cardOutline, calendarOutline,
-      documentTextOutline, notificationsOutline, lockClosedOutline,
+      personOutline, businessOutline, peopleOutline, timerOutline,
+      shieldCheckmarkOutline, notificationsOutline, lockClosedOutline,
       logOutOutline, moonOutline, sunnyOutline, phonePortraitOutline,
-      settingsOutline,
+      ribbonOutline, locationOutline, calendarOutline,
     });
   }
 
@@ -74,10 +81,7 @@ export class ProfilePage {
     this.router.navigate(['/auth/login'], { replaceUrl: true });
   }
 
-  goSettings(): void { this.router.navigate(['/tabs/settings']); }
-  goPersonal():  void { this.router.navigate(['/tabs/profile/personal']); }
-  goSalary():    void { this.router.navigate(['/tabs/profile/salary']); }
-  goBank():      void { this.router.navigate(['/tabs/profile/bank']); }
-  goLeave():     void { this.router.navigate(['/tabs/profile/leave-balances']); }
-  goDocuments(): void { this.router.navigate(['/tabs/profile/documents']); }
+  goPersonal():        void { this.nav.navigateForward('/tabs/profile/personal'); }
+  goAttendanceRules(): void { this.nav.navigateForward('/tabs/attendance-settings'); }
+  comingSoon():        void { this.toast.info('Coming soon'); }
 }

@@ -1,0 +1,23 @@
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  // Attendance status
+  &--present  { background: #2DD36F18; color: #2DD36F; }
+  &--late     { background: #FF990018; color: #FF9900; }
+  &--absent   { background: #FF3B3018; color: #FF3B30; }
+  &--leave    { background: #3880FF18; color: #3880FF; }
+
+  // User status
+  &--active   { background: #2DD36F18; color: #2DD36F; }
+  &--inactive { background: rgba(var(--ion-text-color-rgb), 0.08); color: var(--ion-color-medium); }
+
+  // Role
+  &--employee { background: #3880FF18; color: #3880FF; }
+  &--manager  { background: #FF990018; color: #FF9900; }
+  &--admin    { background: #FF3B3018; color: #FF3B30; }
+}

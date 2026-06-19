@@ -236,35 +236,34 @@ ion-toolbar { --background: var(--ion-background-color); }
   flex-shrink: 0;
 }
 
-// ── Quick actions ─────────────────────────────────────────
+// ── Shortcuts grid ────────────────────────────────────────
 
-.actions-row {
-  display: flex;
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   padding: 0 12px 40px;
 }
 
-.action-btn {
-  flex: 1;
+.shortcut-btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 16px 8px;
+  padding: 16px 8px 12px;
   border-radius: 16px;
   border: none;
   background: var(--ion-background-color);
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ion-color-dark);
   transition: transform 0.15s;
 
   &:active { transform: scale(0.95); }
+  &--soon  { opacity: 0.6; }
 }
 
-.action-icon {
+.shortcut-icon {
   width: 44px;
   height: 44px;
   border-radius: 14px;
@@ -274,6 +273,30 @@ ion-toolbar { --background: var(--ion-background-color); }
   font-size: 22px;
 
   &--blue   { background: #3880FF18; color: #3880FF; }
-  &--purple { background: #5260FF18; color: #5260FF; }
   &--orange { background: #FF990018; color: #FF9900; }
+  &--purple { background: #5260FF18; color: #5260FF; }
+  &--green  { background: #2DD36F18; color: #2DD36F; }
+  &--teal   { background: #0CD1E818; color: #0CD1E8; }
+  &--red    { background: #FF3B3018; color: #FF3B30; }
+}
+
+.soon-badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--ion-color-medium);
+  background: rgba(var(--ion-text-color-rgb), 0.06);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.shortcut-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  text-align: center;
 }

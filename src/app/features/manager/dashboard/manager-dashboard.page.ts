@@ -10,6 +10,8 @@ import {
   timeOutline, calendarOutline, alertCircleOutline, chevronForwardOutline,
 } from 'ionicons/icons';
 import { AuthService } from '@core/services/auth.service';
+import { AvatarComponent } from '@shared/components/avatar/avatar.component';
+import { StatusBadgeComponent } from '@shared/components/status-badge/status-badge.component';
 
 type AttendanceStatus = 'present' | 'late' | 'absent' | 'leave';
 
@@ -24,7 +26,7 @@ interface TeamMember {
   selector: 'app-manager-dashboard',
   templateUrl: 'manager-dashboard.page.html',
   styleUrls: ['manager-dashboard.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, DatePipe],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, DatePipe, AvatarComponent, StatusBadgeComponent],
 })
 export class ManagerDashboardPage {
   private readonly router = inject(Router);

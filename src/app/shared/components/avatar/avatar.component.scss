@@ -1,0 +1,19 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+  border-radius: 12px;
+
+  // Sizes
+  &--sm { width: 32px; height: 32px; font-size: 12px; border-radius: 10px; }
+  &--md { width: 40px; height: 40px; font-size: 15px; border-radius: 12px; }
+  &--lg { width: 48px; height: 48px; font-size: 18px; border-radius: 14px; }
+
+  // Colors
+  &--default  { background: rgba(var(--ion-color-primary-rgb), 0.10); color: var(--ion-color-primary); }
+  &--employee { background: #3880FF18; color: #3880FF; }
+  &--manager  { background: #FF990018; color: #FF9900; }
+  &--admin    { background: #FF3B3018; color: #FF3B30; }
+}
