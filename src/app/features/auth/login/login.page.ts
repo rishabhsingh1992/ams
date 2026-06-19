@@ -48,6 +48,6 @@ export class LoginPage {
     const role = this.auth.currentUser()?.role;
     if (role === 'admin')   return '/tabs/dashboard';
     if (role === 'manager') return '/tabs/manager-home';
-    return '/tabs/home';
+    return '/tabs/profile';
   }
 }
