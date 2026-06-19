@@ -75,23 +75,6 @@ ion-searchbar {
   &--inactive { opacity: 0.5; }
 }
 
-// ── Avatar ────────────────────────────────────────────────
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  flex-shrink: 0;
-
-  &--employee { background: #3880FF18; color: #3880FF; }
-  &--manager  { background: #FF990018; color: #FF9900; }
-  &--admin    { background: #FF3B3018; color: #FF3B30; }
-}
 
 // ── User info ─────────────────────────────────────────────
 
@@ -138,16 +121,3 @@ ion-searchbar {
   &--admin    { background: #FF3B3018; color: #FF3B30; }
 }
 
-// ── Empty state ───────────────────────────────────────────
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 60px 0;
-  color: var(--ion-color-medium);
-
-  ion-icon { font-size: 48px; }
-  p { margin: 0; font-size: 14px; }
-}

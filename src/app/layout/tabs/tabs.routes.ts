@@ -36,6 +36,17 @@ export const routes: Routes = [
           import('@features/profile/profile.page').then((m) => m.ProfilePage),
       },
       {
+        path: 'admin-profile',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('@features/admin/profile/admin-profile.page').then((m) => m.AdminProfilePage),
+      },
+      {
+        path: 'team',
+        loadComponent: () =>
+          import('@features/team/team.page').then((m) => m.TeamPage),
+      },
+      {
         path: 'reports',
         loadComponent: () =>
           import('@features/reports/reports.page').then((m) => m.ReportsPage),

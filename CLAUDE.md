@@ -73,6 +73,7 @@ src/app/
 - **No deep relative imports** — always use path aliases
 - **No comments explaining what code does** — only add comments for non-obvious WHY
 - **No `any` type**
+- **Never navigate between tabs programmatically** — tabs are independent stacks; the user switches tabs only via the tab bar. Never call `router.navigate()` or `NavController` to a tab root (`/tabs/users`, `/tabs/reports`, etc.) from inside another tab. Cross-tab actions must use modals or push pages onto the current tab's own stack via `NavController.navigateForward()`.
 
 ## Design Conventions
 - Cards: `border-radius: 16px`, `box-shadow: 0 2px 12px rgba(0,0,0,0.06)`, `background: var(--ion-background-color)`

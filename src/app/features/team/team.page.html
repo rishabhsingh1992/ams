@@ -1,0 +1,95 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Team</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Date + stats row ─────────────────────────────────── -->
+  <div class="team-greeting">
+    <p class="team-date">{{ today | date:'EEEE, d MMMM' }}</p>
+    <h2 class="team-heading">Team Attendance</h2>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card stat-card--green">
+      <span class="stat-value">{{ stats().present }}</span>
+      <span class="stat-label">Present</span>
+    </div>
+    <div class="stat-card stat-card--orange">
+      <span class="stat-value">{{ stats().late }}</span>
+      <span class="stat-label">Late</span>
+    </div>
+    <div class="stat-card stat-card--red">
+      <span class="stat-value">{{ stats().absent }}</span>
+      <span class="stat-label">Absent</span>
+    </div>
+    <div class="stat-card stat-card--gray">
+      <span class="stat-value">{{ stats().total }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+  </div>
+
+  <!-- ── Approvals banner ──────────────────────────────────── -->
+  @if (pendingApprovals > 0) {
+    <button class="approvals-banner" (click)="goApprovals()">
+      <div class="approvals-left">
+        <div class="approvals-icon">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div>
+          <p class="approvals-title">{{ pendingApprovals }} Leave Requests</p>
+          <p class="approvals-sub">Pending your approval</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="approvals-chevron"></ion-icon>
+    </button>
+  }
+
+  <!-- ── Search ────────────────────────────────────────────── -->
+  <ion-searchbar
+    class="team-search"
+    placeholder="Search by name or department"
+    [value]="search()"
+    (ionInput)="search.set($any($event.target).value ?? '')">
+  </ion-searchbar>
+
+  <!-- ── Status filter chips ───────────────────────────────── -->
+  <div class="filter-chips">
+    @for (f of statusFilters; track f.value) {
+      <button
+        class="chip"
+        [class.chip--active]="statusFilter() === f.value"
+        (click)="statusFilter.set(f.value)">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <!-- ── Member list ───────────────────────────────────────── -->
+  <p class="section-label">{{ filtered().length }} member{{ filtered().length === 1 ? '' : 's' }}</p>
+
+  @if (filtered().length === 0) {
+    <app-empty-state icon="people-outline" message="No members match your filter."></app-empty-state>
+  }
+
+  <div class="members-card">
+    @for (member of filtered(); track member.id) {
+      <div class="member-row">
+        <app-avatar [name]="member.name"></app-avatar>
+        <div class="member-info">
+          <p class="member-name">{{ member.name }}</p>
+          <p class="member-meta">{{ member.role }} · {{ member.department }}</p>
+        </div>
+        <div class="member-right">
+          <app-status-badge [status]="member.status"></app-status-badge>
+          @if (member.checkInTime !== '—') {
+            <p class="check-time">{{ member.checkInTime }}</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+</ion-content>
