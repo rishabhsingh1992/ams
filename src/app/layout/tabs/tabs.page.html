@@ -1,0 +1,41 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+
+    <ion-tab-button [tab]="homeTab()" [href]="homeHref()">
+      <ion-icon name="grid-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    @if (auth.currentUser()?.role === 'employee' || auth.currentUser()?.role === 'manager') {
+      <ion-tab-button tab="attendance" href="/tabs/attendance">
+        <ion-icon name="finger-print-outline"></ion-icon>
+        <ion-label>Attendance</ion-label>
+      </ion-tab-button>
+    }
+
+    @if (auth.currentUser()?.role === 'manager' || auth.currentUser()?.role === 'admin') {
+      <ion-tab-button tab="team" href="/tabs/team">
+        <ion-icon name="people-outline"></ion-icon>
+        <ion-label>Team</ion-label>
+      </ion-tab-button>
+    }
+
+    @if (auth.currentUser()?.role === 'admin') {
+      <ion-tab-button tab="users" href="/tabs/users">
+        <ion-icon name="person-add-outline"></ion-icon>
+        <ion-label>Users</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="reports" href="/tabs/reports">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <ion-label>Reports</ion-label>
+      </ion-tab-button>
+    }
+
+    <ion-tab-button tab="profile" href="/tabs/profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

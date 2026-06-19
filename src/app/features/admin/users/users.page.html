@@ -1,0 +1,54 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-searchbar
+    placeholder="Search name, department, ID…"
+    [value]="search()"
+    (ionInput)="search.set($event.detail.value ?? '')"
+    animated>
+  </ion-searchbar>
+
+  <div class="filter-chips">
+    @for (f of filters; track f.value) {
+      <button class="chip" [class.chip--active]="filter() === f.value" (click)="filter.set(f.value)">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <p class="count-label">{{ filtered().length }} user{{ filtered().length !== 1 ? 's' : '' }}</p>
+
+  <div class="user-list">
+    @for (user of filtered(); track user.id) {
+      <div class="user-card" [class.user-card--inactive]="user.status === 'inactive'" (click)="openEdit(user.id)">
+        <div class="avatar avatar--{{ user.role }}">{{ initials(user.fullName) }}</div>
+        <div class="user-info">
+          <p class="user-name">{{ user.fullName }}</p>
+          <p class="user-meta">{{ user.employeeId }} · {{ user.department }}</p>
+          <span class="role-badge role-badge--{{ user.role }}">{{ user.role }}</span>
+        </div>
+        <ion-toggle
+          [checked]="user.status === 'active'"
+          (click)="toggleStatus(user.id, $event)">
+        </ion-toggle>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <ion-icon name="person-outline"></ion-icon>
+        <p>No users found</p>
+      </div>
+    }
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addUser()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

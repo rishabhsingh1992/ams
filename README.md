@@ -1,53 +1,169 @@
 # AMS — Attendance Management System
 
-A cross-platform mobile application built with **Ionic 8**, **Angular 20**, and **Capacitor 8**.
+A mobile-first attendance tracking app built with **Angular 20**, **Ionic 8**, and **Capacitor**. Employees clock in/out using GPS verification and a front-camera selfie. Managers and admins get reporting and team oversight tools.
+
+---
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Framework | Ionic 8 + Angular 20 (standalone components) |
-| Language | TypeScript 5.9 |
-| Mobile Runtime | Capacitor 8 (iOS / Android) |
+| Framework | Angular 20 (standalone components, signals) |
+| UI Library | Ionic 8 (standalone tree-shaken imports) |
+| Native Runtime | Capacitor 8 (iOS + Android) |
+| Language | TypeScript 5.9 (strict mode) |
+| Styling | SCSS + Ionic CSS custom properties |
+| State | Angular signals + localStorage |
 | Linting | ESLint + angular-eslint |
-| Testing | Karma + Jasmine |
 
-## Prerequisites
+---
 
-- Node.js 20+
-- npm 10+
-- [Ionic CLI](https://ionicframework.com/docs/cli): `npm install -g @ionic/cli`
-- [Angular CLI](https://angular.dev/tools/cli): `npm install -g @angular/cli`
+## Features
+
+| Feature | Status |
+|---|---|
+| GPS-verified clock in / clock out | Done |
+| Front-camera selfie capture on attendance | Done |
+| Daily attendance persistence (localStorage) | Done |
+| Monthly attendance history with locations | Done |
+| Dark / light / system theme | Done |
+| Reports page (scaffold) | Done |
+| Settings page | Done |
+| Role selection dialog component | Done |
+| Add user dialog component | Done |
+
+---
+
+## Screens by Role
+
+### Common — All Roles
+
+| Screen | Route | Notes |
+|---|---|---|
+| Login | `/auth/login` | Email + password, JWT |
+| Forgot Password | `/auth/forgot-password` | OTP / reset link |
+| Home / Dashboard | `/tabs/home` | Role-aware summary cards |
+| Profile | `/tabs/profile` | View own info, theme toggle |
+| Edit Profile | `/tabs/profile/edit` | Change name, avatar, password |
+| Settings | `/tabs/settings` | Notifications, biometrics, theme, about |
+
+### Employee
+
+| Screen | Route | Notes |
+|---|---|---|
+| Mark Attendance | `/tabs/home` | GPS check-in/out + front-camera selfie |
+| Attendance History | `/tabs/attendance/history` | Calendar + list, reverse-geocoded location |
+| Attendance Day Detail | `/tabs/attendance/:date` | Single-day drill-down (in/out times, map) |
+| Apply Leave | `/tabs/leave/apply` | Date range picker, leave type, reason |
+| My Leaves | `/tabs/leave/list` | Status-badged leave list |
+| Leave Detail | `/tabs/leave/:id` | Full request info + cancel option |
+
+### Manager *(all Employee screens, plus)*
+
+| Screen | Route | Notes |
+|---|---|---|
+| Team Attendance | `/tabs/team` | Daily/weekly grid of team presence |
+| Approval Queue | `/tabs/team/approvals` | Pending leave requests |
+| Approve / Reject Leave | `/tabs/team/approvals/:id` | Review with comment |
+
+### Admin *(all Manager screens, plus)*
+
+| Screen | Route | Notes |
+|---|---|---|
+| User Management | `/admin/users` | List, search, filter by department/role |
+| Add User | `/admin/users/add` | Full user form (name, email, role, dept) |
+| Edit User | `/admin/users/:id/edit` | Update role, department, status |
+| Attendance Report | `/tabs/reports/attendance` | Filters + chart + CSV/PDF export |
+| Leave Report | `/tabs/reports/leave` | Balance summary + leave breakdown |
+| Team Report | `/tabs/reports/team` | Cross-team presence/absence analytics |
+
+---
+
+## Project Structure
+
+```
+src/
+└── app/
+    ├── core/                            # Singleton services and domain models
+    │   ├── models/
+    │   │   ├── attendance.model.ts      # CheckStatus, TodayRecord, AttendanceRecord, MonthData
+    │   │   └── user.model.ts            # UserRole, RoleOption, NewUser
+    │   └── services/
+    │       └── theme.service.ts         # Dark/light/system theme via signal
+    │
+    ├── features/                        # One folder per routed feature
+    │   ├── home/                        # Clock in/out with GPS + selfie capture
+    │   ├── attendance/                  # Monthly attendance history
+    │   ├── profile/                     # User profile view
+    │   ├── reports/                     # Report categories (scaffold)
+    │   └── settings/                    # App settings, links to Reports
+    │
+    ├── layout/
+    │   └── tabs/                        # Bottom tab bar shell + route config
+    │       ├── tabs.page.ts/html/scss
+    │       └── tabs.routes.ts
+    │
+    ├── shared/
+    │   └── components/                  # Reusable bottom-sheet components
+    │       ├── camera-preview/          # Capacitor camera: flip, capture, confirm
+    │       ├── role-picker/             # Role selector (Employee/Manager/Admin)
+    │       └── add-user/               # Add user form with validation
+    │
+    ├── app.component.ts
+    └── app.routes.ts
+```
+
+### Path Aliases (`tsconfig.json`)
+
+| Alias | Resolves to |
+|---|---|
+| `@core/*` | `src/app/core/*` |
+| `@features/*` | `src/app/features/*` |
+| `@layout/*` | `src/app/layout/*` |
+| `@shared/*` | `src/app/shared/*` |
+| `@env/*` | `src/environments/*` |
+| `@assets/*` | `src/assets/*` |
+| `@theme/*` | `src/theme/*` |
+
+---
+
+## Routes
+
+| Path | Component | Entry Point |
+|---|---|---|
+| `/tabs/home` | `HomePage` | Tab bar — Home |
+| `/tabs/attendance` | `AttendancePage` | Tab bar — Attendance |
+| `/tabs/profile` | `ProfilePage` | Tab bar — Profile |
+| `/tabs/settings` | `SettingsPage` | FAB button on Profile |
+| `/tabs/reports` | `ReportsPage` | Settings → Reports |
+
+---
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+- Ionic CLI: `npm install -g @ionic/cli`
+- Angular CLI: `npm install -g @angular/cli`
+- Android Studio (for Android builds)
+- Xcode 15+ (for iOS builds)
+
+### Install & Run
+
 ```bash
-# Install dependencies
 npm install
-
-# Serve in browser (hot reload)
-npm start
-# or
-ionic serve
-
-# Run unit tests
-npm test
-
-# Lint
-npm run lint
+ionic serve          # browser dev server at http://localhost:8100
 ```
 
-## Build
+### Build & Deploy
 
 ```bash
 # Production web build
 npm run build
 
-# Add a native platform (first time)
-ionic capacitor add android
-ionic capacitor add ios
-
-# Sync web assets to native project
+# Sync to native (first time: ionic capacitor add android/ios)
 ionic capacitor sync
 
 # Open native IDE
@@ -55,29 +171,7 @@ ionic capacitor open android   # Android Studio
 ionic capacitor open ios       # Xcode
 ```
 
-## Project Structure
-
-```
-src/
-├── app/               # Feature modules and routing
-│   ├── tab1/          # Tab pages
-│   ├── tab2/
-│   ├── tab3/
-│   └── tabs/          # Tab shell
-├── assets/            # Static assets
-├── environments/      # Environment configs (see below)
-└── theme/             # Global Ionic theme variables
-```
-
-## Environment Configuration
-
-Environment files are **not committed**. Copy the example before first run:
-
-```bash
-cp src/environments/environment.example.ts src/environments/environment.ts
-```
-
-Edit `environment.ts` with your local values. `environment.prod.ts` is generated at build time via Angular build configurations.
+---
 
 ## Scripts
 
@@ -86,11 +180,59 @@ Edit `environment.ts` with your local values. `environment.prod.ts` is generated
 | `npm start` | Dev server at `http://localhost:8100` |
 | `npm run build` | Production build to `/www` |
 | `npm run watch` | Dev build with file watching |
-| `npm test` | Unit tests |
 | `npm run lint` | ESLint check |
+
+---
+
+## Shared Components
+
+### `<app-role-picker>`
+Bottom sheet for selecting a user role. Emits `roleSelected: UserRole` on confirm, `dismissed` on cancel.
+
+```html
+@if (showRolePicker) {
+  <app-role-picker
+    (roleSelected)="onRoleSelected($event)"
+    (dismissed)="showRolePicker = false"
+  />
+}
+```
+
+### `<app-add-user>`
+Bottom sheet form to add a new user (name, email, phone, employee ID, department, role). Emits `userAdded: NewUser` on valid submit, `dismissed` on cancel.
+
+```html
+@if (showAddUser) {
+  <app-add-user
+    (userAdded)="onUserAdded($event)"
+    (dismissed)="showAddUser = false"
+  />
+}
+```
+
+### `<app-camera-preview>`
+Full-featured camera preview with front-camera flip, selfie capture, orientation normalization, and confirm/retake flow. Emits `capture` when the user confirms.
+
+```html
+<app-camera-preview (capture)="onCapture()"></app-camera-preview>
+```
+
+---
+
+## Conventions
+
+- **Standalone components only** — no NgModules
+- **`inject()` over constructor injection** where possible
+- **Signals** for reactive state (`signal()`, `computed()`)
+- **`@core/models`** for all shared interfaces/types — never define models inside components
+- **`@for` / `@if`** control flow syntax (Angular 17+)
+- **SCSS BEM-style** class naming with Ionic CSS custom properties
+- **Path aliases** (`@core/*`, `@features/*`, etc.) — never use deep relative imports across layers
+
+---
 
 ## Contributing
 
-1. Branch from `main` using the convention `feature/<slug>` or `fix/<slug>`.
-2. Run `npm run lint` and `npm test` before opening a PR.
-3. Keep commits atomic and descriptive.
+1. Branch from `main` using `feature/<slug>` or `fix/<slug>`.
+2. Run `npm run lint` before opening a PR.
+3. Keep commits atomic and descriptive (conventional commits preferred).

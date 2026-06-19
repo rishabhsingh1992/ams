@@ -1,0 +1,45 @@
+<ion-content class="login-content">
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <div class="login-hero">
+    <div class="login-logo">AMS</div>
+    <h1 class="login-app-name">Attendance</h1>
+    <p class="login-tagline">Track. Manage. Grow.</p>
+  </div>
+
+  <!-- ── Card ──────────────────────────────────────────────── -->
+  <div class="login-card">
+
+    <h2 class="login-title">Welcome Back</h2>
+    <p class="login-subtitle">Enter your phone number to sign in</p>
+
+    <ion-input
+      class="login-input"
+      [class.ion-invalid]="!!errorMsg"
+      [class.ion-touched]="!!errorMsg"
+      type="tel"
+      inputmode="tel"
+      fill="outline"
+      label="Phone Number"
+      label-placement="floating"
+      placeholder="e.g. +91 98765 43210"
+      [(ngModel)]="phone"
+      (keydown.enter)="login()">
+      <ion-icon slot="start" name="phone-portrait-outline"></ion-icon>
+      <ion-note slot="error">{{ errorMsg }}</ion-note>
+      <ion-note slot="helper">Demo: <strong>1000</strong> Admin &nbsp;·&nbsp; <strong>2000</strong> Manager &nbsp;·&nbsp; <strong>3000</strong> Employee</ion-note>
+    </ion-input>
+
+    <ion-button
+      class="login-btn"
+      expand="block"
+      shape="round"
+      [disabled]="!phone.trim()"
+      (click)="login()">
+      Sign In
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+
+  </div>
+
+</ion-content>

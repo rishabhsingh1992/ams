@@ -1,0 +1,35 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Documents</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <p class="section-label">My Documents</p>
+  <ion-list lines="none" class="info-list">
+
+    @for (doc of docs; track doc.name) {
+      <ion-item class="info-item" button>
+        <div class="info-icon info-icon--purple" slot="start">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+        <ion-label>
+          <span class="info-value">{{ doc.name }}</span>
+          <p class="info-label">{{ doc.date }} · PDF · {{ doc.size }}</p>
+        </ion-label>
+        <ion-icon name="download-outline" slot="end" class="dl-icon"></ion-icon>
+      </ion-item>
+    }
+
+  </ion-list>
+
+  <div class="info-note">
+    <ion-icon name="document-text-outline"></ion-icon>
+    Need a document? Raise a request with HR.
+  </div>
+
+</ion-content>

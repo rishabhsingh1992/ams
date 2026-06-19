@@ -1,0 +1,121 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Salary Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Earnings ───────────────────────────────────────── -->
+  <p class="section-label">Earnings</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--green" slot="start">
+        <ion-icon name="cash-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Annual CTC</p>
+        <span class="info-value">₹12,00,000</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--green" slot="start">
+        <ion-icon name="wallet-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Basic Pay</p>
+        <span class="info-value">₹5,00,000 / year</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--green" slot="start">
+        <ion-icon name="business-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">HRA</p>
+        <span class="info-value">₹2,40,000 / year</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--green" slot="start">
+        <ion-icon name="star-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Special Allowance</p>
+        <span class="info-value">₹4,60,000 / year</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Deductions ─────────────────────────────────────── -->
+  <p class="section-label">Deductions</p>
+  <ion-list lines="none" class="info-list">
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--orange" slot="start">
+        <ion-icon name="remove-circle-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">PF (Employee 12%)</p>
+        <span class="info-value">₹60,000 / year</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item">
+      <div class="info-icon info-icon--orange" slot="start">
+        <ion-icon name="remove-circle-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">Professional Tax</p>
+        <span class="info-value">₹2,400 / year</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-item class="info-item" lines="none">
+      <div class="info-icon info-icon--orange" slot="start">
+        <ion-icon name="trending-down-outline"></ion-icon>
+      </div>
+      <ion-label>
+        <p class="info-label">TDS (Estimated)</p>
+        <span class="info-value">₹1,00,000 / year</span>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- ── Net Pay ────────────────────────────────────────── -->
+  <div class="net-pay-card">
+    <p class="net-pay-label">Monthly In-hand</p>
+    <p class="net-pay-amount">₹86,467</p>
+    <p class="net-pay-sub">After all deductions · FY 2025–26</p>
+  </div>
+
+  <!-- ── Payslips ───────────────────────────────────────── -->
+  <p class="section-label">Recent Payslips</p>
+  <ion-list lines="none" class="info-list">
+
+    @for (slip of payslips; track slip.month) {
+      <ion-item class="info-item" button>
+        <div class="info-icon info-icon--blue" slot="start">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+        <ion-label>
+          <p class="info-label">Payslip</p>
+          <span class="info-value">{{ slip.month }}</span>
+        </ion-label>
+        <div class="payslip-net" slot="end">{{ slip.net }}</div>
+        <ion-icon name="download-outline" slot="end" class="dl-icon"></ion-icon>
+      </ion-item>
+    }
+
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,100 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- ── Greeting ─────────────────────────────────────────── -->
+  <div class="greeting">
+    <div>
+      <p class="greeting-sub">{{ today | date:'EEEE, d MMMM' }}</p>
+      <h2 class="greeting-title">Good morning, {{ auth.currentUser()?.name?.split(' ')?.[0] }}</h2>
+    </div>
+    <div class="greeting-badge">Admin</div>
+  </div>
+
+  <!-- ── Attendance ring + stat chips ─────────────────────── -->
+  <div class="summary-card">
+    <div class="ring-wrap">
+      <div class="ring" [style.background]="ringGradient">
+        <div class="ring-inner">
+          <span class="ring-pct">{{ presentPct }}%</span>
+          <span class="ring-label">Present</span>
+        </div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat stat--green">
+        <span class="stat-value">{{ stats.present }}</span>
+        <span class="stat-label">Present</span>
+      </div>
+      <div class="stat stat--red">
+        <span class="stat-value">{{ stats.absent }}</span>
+        <span class="stat-label">Absent</span>
+      </div>
+      <div class="stat stat--orange">
+        <span class="stat-value">{{ stats.late }}</span>
+        <span class="stat-label">Late</span>
+      </div>
+      <div class="stat stat--blue">
+        <span class="stat-value">{{ stats.onLeave }}</span>
+        <span class="stat-label">On Leave</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Department breakdown ──────────────────────────────── -->
+  <p class="section-label">Department Attendance</p>
+  <div class="dept-card">
+    @for (dept of departments; track dept.name) {
+      <div class="dept-row">
+        <span class="dept-name">{{ dept.name }}</span>
+        <div class="dept-bar-wrap">
+          <div class="dept-bar" [style.width]="deptBarWidth(dept)"></div>
+        </div>
+        <span class="dept-count">{{ dept.present }}/{{ dept.total }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- ── Recent activity ───────────────────────────────────── -->
+  <p class="section-label">Recent Activity</p>
+  <div class="activity-card">
+    @for (item of recentActivity; track item.name) {
+      <div class="activity-row">
+        <div class="activity-dot activity-dot--{{ item.type }}"></div>
+        <div class="activity-info">
+          <p class="activity-name">{{ item.name }}</p>
+          <p class="activity-action">{{ item.action }}</p>
+        </div>
+        <span class="activity-time">{{ item.time }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- ── Quick actions ─────────────────────────────────────── -->
+  <p class="section-label">Quick Actions</p>
+  <div class="actions-row">
+    <button class="action-btn" (click)="goUsers()">
+      <div class="action-icon action-icon--blue">
+        <ion-icon name="person-add-outline"></ion-icon>
+      </div>
+      <span>Users</span>
+    </button>
+    <button class="action-btn" (click)="goReports()">
+      <div class="action-icon action-icon--purple">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </div>
+      <span>Reports</span>
+    </button>
+    <button class="action-btn" (click)="goSettings()">
+      <div class="action-icon action-icon--orange">
+        <ion-icon name="settings-outline"></ion-icon>
+      </div>
+      <span>Settings</span>
+    </button>
+  </div>
+
+</ion-content>
