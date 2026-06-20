@@ -3,7 +3,7 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angu
 import { addIcons } from 'ionicons';
 import {
   gridOutline, fingerPrintOutline, personOutline,
-  peopleOutline, documentTextOutline, personAddOutline,
+  peopleOutline, documentTextOutline, personAddOutline, settingsOutline,
 } from 'ionicons/icons';
 import { AuthService } from '@core/services/auth.service';
 
@@ -29,7 +29,7 @@ export class TabsPage {
   constructor() {
     addIcons({
       gridOutline, fingerPrintOutline, personOutline,
-      peopleOutline, documentTextOutline, personAddOutline,
+      peopleOutline, documentTextOutline, personAddOutline, settingsOutline,
     });
   }
 }

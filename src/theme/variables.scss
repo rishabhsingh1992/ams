@@ -1,2 +1,46 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// ── Brand palette ─────────────────────────────────────────
+:root {
+  --theme-palette-color-1: #ff0078;
+  --theme-palette-color-2: #2120ea;
+  --theme-palette-color-3: #355575;
+  --theme-palette-color-4: #102136;
+  --theme-palette-color-5: #E7EBEE;
+  --theme-palette-color-6: #F3F5F7;
+  --theme-palette-color-7: #F7FAFD;
+  --theme-palette-color-8: #ffffff;
+  --theme-palette-color-9: #FFE8DA;
+  --theme-text-color:      #000000;
+}
+
+// ── Light mode overrides ──────────────────────────────────
+html:not(.ion-palette-dark) {
+
+  // Primary → deep blue
+  --ion-color-primary:              #2120ea;
+  --ion-color-primary-rgb:          33, 32, 234;
+  --ion-color-primary-contrast:     #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade:        #1d1cce;
+  --ion-color-primary-tint:         #3736ec;
+
+  // Dark → navy (richer than pure black)
+  --ion-color-dark:              #102136;
+  --ion-color-dark-rgb:          16, 33, 54;
+  --ion-color-dark-contrast:     #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade:        #0d1c2e;
+  --ion-color-dark-tint:         #283749;
+
+  // Surfaces: cards/items/lists stay white, toolbar/tabs stay white
+  --ion-background-color:        #ffffff;
+  --ion-background-color-rgb:    255, 255, 255;
+  --ion-item-background:         #ffffff;
+  --ion-toolbar-background:      #ffffff;
+  --ion-tab-bar-background:      #ffffff;
+  --ion-tab-bar-border-color:    #E7EBEE;
+
+  // ion-content scrollable area gets the blue tint (cards float on it)
+  ion-content {
+    --background: #F7FAFD;
+  }
+}

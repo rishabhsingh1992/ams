@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonIcon,
 } from '@ionic/angular/standalone';
@@ -9,7 +8,6 @@ import {
   peopleOutline, checkmarkCircleOutline, closeCircleOutline,
   timeOutline, calendarOutline, alertCircleOutline, chevronForwardOutline,
 } from 'ionicons/icons';
-import { AuthService } from '@core/services/auth.service';
 import { AvatarComponent } from '@shared/components/avatar/avatar.component';
 import { StatusBadgeComponent } from '@shared/components/status-badge/status-badge.component';
 
@@ -26,13 +24,10 @@ interface TeamMember {
   selector: 'app-manager-dashboard',
   templateUrl: 'manager-dashboard.page.html',
   styleUrls: ['manager-dashboard.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, DatePipe, AvatarComponent, StatusBadgeComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, AvatarComponent, StatusBadgeComponent],
 })
 export class ManagerDashboardPage {
   private readonly router = inject(Router);
-  readonly auth           = inject(AuthService);
-
-  readonly today = new Date();
 
   readonly teamStats = {
     total:   12,

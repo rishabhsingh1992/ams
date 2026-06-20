@@ -2,16 +2,13 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
-  IonSearchbar, IonFab, IonFabButton, IonIcon, IonToggle,
+  IonSearchbar, IonFab, IonFabButton, IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline } from 'ionicons/icons';
+import { chevronForwardOutline, searchOutline, closeOutline } from 'ionicons/icons';
 import { UserService } from '@core/services/user.service';
-import { UserRole } from '@core/models/user.model';
 import { AvatarComponent } from '@shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
-
-type FilterRole = UserRole | 'all';
 
 @Component({
   selector: 'app-users',
@@ -19,7 +16,7 @@ type FilterRole = UserRole | 'all';
   styleUrls: ['users.page.scss'],
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
-    IonSearchbar, IonFab, IonFabButton, IonIcon, IonToggle,
+    IonSearchbar, IonFab, IonFabButton, IonIcon,
     AvatarComponent, EmptyStateComponent,
   ],
 })
@@ -27,41 +24,33 @@ export class UsersPage {
   private readonly userService = inject(UserService);
   private readonly router      = inject(Router);
 
-  readonly search = signal('');
-  readonly filter = signal<FilterRole>('all');
-
-  readonly filters: { label: string; value: FilterRole }[] = [
-    { label: 'All',      value: 'all'      },
-    { label: 'Employee', value: 'employee' },
-    { label: 'Manager',  value: 'manager'  },
-    { label: 'Admin',    value: 'admin'    },
-  ];
+  readonly search     = signal('');
+  readonly showSearch = signal(false);
 
   readonly filtered = computed(() => {
     const q = this.search().toLowerCase();
-    const f = this.filter();
-    return this.userService.users().filter(u => {
-      const roleMatch   = f === 'all' || u.role === f;
-      const searchMatch = !q ||
-        u.fullName.toLowerCase().includes(q) ||
-        u.department.toLowerCase().includes(q) ||
-        u.employeeId.toLowerCase().includes(q);
-      return roleMatch && searchMatch;
-    });
+    if (!q) return this.userService.users();
+    return this.userService.users().filter(u =>
+      u.fullName.toLowerCase().includes(q) ||
+      u.department.toLowerCase().includes(q) ||
+      u.employeeId.toLowerCase().includes(q)
+    );
   });
 
-  constructor() { addIcons({ addOutline }); }
+  constructor() { addIcons({ chevronForwardOutline, searchOutline, closeOutline }); }
 
-  toggleStatus(id: string, event: Event): void {
-    event.stopPropagation();
-    this.userService.toggleStatus(id);
+  toggleSearch(): void {
+    this.showSearch.update(v => !v);
+    if (!this.showSearch()) this.search.set('');
+  }
+
+  closeSearch(): void {
+    this.showSearch.set(false);
+    this.search.set('');
   }
 
   openEdit(id: string): void {
     this.router.navigate(['/tabs/users', id, 'edit']);
   }
 
-  addUser(): void {
-    this.router.navigate(['/tabs/users/add']);
-  }
 }

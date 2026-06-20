@@ -1,8 +1,5 @@
 ﻿<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/profile" text=""></ion-back-button>
-    </ion-buttons>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -59,7 +56,7 @@
   <p class="section-label">Appearance</p>
   <ion-list lines="none" class="settings-list">
 
-    <ion-item class="settings-item" button lines="none" (click)="cyclTheme()">
+    <ion-item class="settings-item" button detail lines="none" (click)="goTheme()">
       <div class="settings-icon settings-icon--purple" slot="start">
         <ion-icon [name]="themeIcon()"></ion-icon>
       </div>
@@ -67,7 +64,6 @@
         <p class="settings-name">Theme</p>
         <span class="settings-desc">{{ themeLabel() }}</span>
       </ion-label>
-      <ion-icon name="chevron-forward-outline" slot="end" class="chevron"></ion-icon>
     </ion-item>
 
   </ion-list>

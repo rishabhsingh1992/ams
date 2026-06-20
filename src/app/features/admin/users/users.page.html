@@ -6,22 +6,19 @@
 
 <ion-content>
 
-  <ion-searchbar
-    placeholder="Search name, department, ID…"
-    [value]="search()"
-    (ionInput)="search.set($event.detail.value ?? '')"
-    animated>
-  </ion-searchbar>
-
-  <div class="filter-chips">
-    @for (f of filters; track f.value) {
-      <button class="chip" [class.chip--active]="filter() === f.value" (click)="filter.set(f.value)">
-        {{ f.label }}
-      </button>
-    }
-  </div>
-
-  <p class="count-label">{{ filtered().length }} user{{ filtered().length !== 1 ? 's' : '' }}</p>
+  @if (showSearch()) {
+    <div class="search-bar-wrap">
+      <ion-searchbar
+        #searchbar
+        placeholder="Search name, department, ID…"
+        [value]="search()"
+        (ionInput)="search.set($event.detail.value ?? '')"
+        (ionCancel)="closeSearch()"
+        showCancelButton="always"
+        animated>
+      </ion-searchbar>
+    </div>
+  }
 
   <div class="user-list">
     @for (user of filtered(); track user.id) {
@@ -32,20 +29,21 @@
           <p class="user-meta">{{ user.employeeId }} · {{ user.department }}</p>
           <span class="role-badge role-badge--{{ user.role }}">{{ user.role }}</span>
         </div>
-        <ion-toggle
-          [checked]="user.status === 'active'"
-          (click)="toggleStatus(user.id, $event)">
-        </ion-toggle>
+        <div class="card-end">
+          <span class="status-dot" [class.status-dot--active]="user.status === 'active'"></span>
+          <ion-icon name="chevron-forward-outline" class="card-chevron"></ion-icon>
+        </div>
       </div>
     } @empty {
       <app-empty-state icon="person-outline" message="No users found"></app-empty-state>
     }
   </div>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="addUser()">
-      <ion-icon name="add-outline"></ion-icon>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="start">
+    <ion-fab-button color="light" (click)="toggleSearch()">
+      <ion-icon [name]="showSearch() ? 'close-outline' : 'search-outline'"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 
 </ion-content>

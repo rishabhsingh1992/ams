@@ -45,6 +45,22 @@
     </div>
   </div>
 
+  <!-- ── Shortcuts ────────────────────────────────────────── -->
+  <p class="section-label">Shortcuts</p>
+  <div class="shortcuts-grid">
+    @for (s of shortcuts; track s.label) {
+      <button class="shortcut-btn" [class.shortcut-btn--soon]="s.soon" (click)="runShortcut(s)">
+        <div class="shortcut-icon shortcut-icon--{{ s.color }}">
+          <ion-icon [name]="s.icon"></ion-icon>
+        </div>
+        @if (s.soon) {
+          <span class="soon-badge">Soon</span>
+        }
+        <span class="shortcut-label">{{ s.label }}</span>
+      </button>
+    }
+  </div>
+
   <!-- ── Department breakdown ──────────────────────────────── -->
   <p class="section-label">Department Attendance</p>
   <div class="dept-card">
@@ -71,22 +87,6 @@
         </div>
         <span class="activity-time">{{ item.time }}</span>
       </div>
-    }
-  </div>
-
-  <!-- ── Shortcuts ────────────────────────────────────────── -->
-  <p class="section-label">Shortcuts</p>
-  <div class="shortcuts-grid">
-    @for (s of shortcuts; track s.label) {
-      <button class="shortcut-btn" [class.shortcut-btn--soon]="s.soon" (click)="runShortcut(s)">
-        <div class="shortcut-icon shortcut-icon--{{ s.color }}">
-          <ion-icon [name]="s.icon"></ion-icon>
-        </div>
-        @if (s.soon) {
-          <span class="soon-badge">Soon</span>
-        }
-        <span class="shortcut-label">{{ s.label }}</span>
-      </button>
     }
   </div>
 

@@ -7,38 +7,6 @@ ion-searchbar {
   padding: 8px 12px 0;
 }
 
-// ── Filter chips ──────────────────────────────────────────
-
-.filter-chips {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px 4px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.chip {
-  flex-shrink: 0;
-  height: 32px;
-  padding: 0 14px;
-  border-radius: 16px;
-  border: 1.5px solid rgba(var(--ion-text-color-rgb, 0,0,0), 0.1);
-  background: transparent;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ion-color-medium);
-  cursor: pointer;
-  transition: all 0.18s;
-
-  &--active {
-    border-color: var(--ion-color-primary);
-    background: rgba(var(--ion-color-primary-rgb), 0.1);
-    color: var(--ion-color-primary);
-    font-weight: 600;
-  }
-}
-
 // ── Count label ───────────────────────────────────────────
 
 .count-label {
@@ -73,6 +41,27 @@ ion-searchbar {
   transition: opacity 0.2s;
 
   &--inactive { opacity: 0.5; }
+}
+
+.card-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FF3B30;
+  &--active { background: #2DD36F; }
+}
+
+.card-chevron {
+  font-size: 16px;
+  color: var(--ion-color-medium);
 }
 
 

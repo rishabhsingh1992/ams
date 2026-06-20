@@ -3,17 +3,12 @@ import { Router } from '@angular/router';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonIcon,
-  IonToggle, IonButton, IonSelect, IonSelectOption,
-  IonFab, IonFabButton,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   personOutline, cashOutline, cardOutline, calendarOutline,
-  documentTextOutline, notificationsOutline, lockClosedOutline,
-  logOutOutline, moonOutline, sunnyOutline, phonePortraitOutline,
-  settingsOutline,
+  documentTextOutline,
 } from 'ionicons/icons';
-import { ThemeService, ThemeMode } from '@core/services/theme.service';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({
@@ -23,15 +18,11 @@ import { AuthService } from '@core/services/auth.service';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonIcon,
-    IonToggle, IonButton, IonSelect, IonSelectOption,
-    IonFab, IonFabButton,
   ],
 })
 export class ProfilePage {
-  readonly theme   = inject(ThemeService);
-  readonly auth    = inject(AuthService);
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  notificationsEnabled = true;
 
   readonly initials = computed(() => {
     const name = this.auth.currentUser()?.name ?? '';
@@ -44,37 +35,20 @@ export class ProfilePage {
     admin:    'Administrator',
   }[this.auth.currentUser()?.role ?? 'employee']));
 
-  readonly themeIcon = computed(() => ({
-    system: 'phone-portrait-outline',
-    light:  'sunny-outline',
-    dark:   'moon-outline',
-  }[this.theme.mode()]));
-
-  readonly themeLabel = computed(() => ({
-    system: 'System Default',
-    light:  'Light',
-    dark:   'Dark',
-  }[this.theme.mode()]));
+  readonly greeting = computed(() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  });
 
   constructor() {
     addIcons({
       personOutline, cashOutline, cardOutline, calendarOutline,
-      documentTextOutline, notificationsOutline, lockClosedOutline,
-      logOutOutline, moonOutline, sunnyOutline, phonePortraitOutline,
-      settingsOutline,
+      documentTextOutline,
     });
   }
 
-  onThemeChange(mode: ThemeMode): void {
-    this.theme.setMode(mode);
-  }
-
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/auth/login'], { replaceUrl: true });
-  }
-
-  goSettings(): void { this.router.navigate(['/tabs/settings']); }
   goPersonal():  void { this.router.navigate(['/tabs/profile/personal']); }
   goSalary():    void { this.router.navigate(['/tabs/profile/salary']); }
   goBank():      void { this.router.navigate(['/tabs/profile/bank']); }

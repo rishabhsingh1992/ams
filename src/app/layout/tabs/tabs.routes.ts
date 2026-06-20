@@ -57,6 +57,11 @@ export const routes: Routes = [
           import('@features/settings/settings.page').then((m) => m.SettingsPage),
       },
       {
+        path: 'settings/theme',
+        loadComponent: () =>
+          import('@features/settings/theme/theme-settings.page').then((m) => m.ThemeSettingsPage),
+      },
+      {
         path: 'profile/personal',
         loadComponent: () =>
           import('@features/profile/personal-details/personal-details.page').then(

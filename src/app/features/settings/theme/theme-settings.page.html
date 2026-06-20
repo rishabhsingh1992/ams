@@ -1,0 +1,33 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/settings" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Theme</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <p class="section-label">Appearance</p>
+  <ion-list lines="none" class="theme-list">
+
+    @for (option of options; track option.value) {
+      <ion-item class="theme-item" button (click)="select(option.value)"
+                [class.theme-item--last]="$last">
+        <div class="theme-icon theme-icon--{{ option.color }}" slot="start">
+          <ion-icon [name]="option.icon"></ion-icon>
+        </div>
+        <ion-label>
+          <p class="theme-name">{{ option.label }}</p>
+          <span class="theme-desc">{{ option.desc }}</span>
+        </ion-label>
+        @if (theme.mode() === option.value) {
+          <ion-icon name="checkmark-outline" slot="end" class="check-icon"></ion-icon>
+        }
+      </ion-item>
+    }
+
+  </ion-list>
+
+</ion-content>

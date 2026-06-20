@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
-  IonHeader, IonToolbar, IonContent, IonFooter,
+  IonHeader, IonToolbar, IonTitle, IonButtons, IonContent, IonFooter,
   IonIcon, IonButton,
   ToastController,
 } from '@ionic/angular/standalone';
@@ -24,7 +24,7 @@ const STORAGE_KEY = 'ams_today';
   styleUrls: ['home.page.scss'],
   imports: [
     DatePipe,
-    IonHeader, IonToolbar, IonContent, IonFooter,
+    IonHeader, IonToolbar, IonTitle, IonButtons, IonContent, IonFooter,
     IonIcon, IonButton,
     CameraPreviewComponent,
   ],

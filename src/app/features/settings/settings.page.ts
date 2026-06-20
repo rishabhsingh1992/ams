@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton,
+  IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonIcon, IonToggle,
 } from '@ionic/angular/standalone';
 import { AuthService } from '@core/services/auth.service';
@@ -12,14 +12,14 @@ import {
   shieldCheckmarkOutline, informationCircleOutline, documentTextOutline,
   helpCircleOutline, logOutOutline, chevronForwardOutline, timeOutline,
 } from 'ionicons/icons';
-import { ThemeService, ThemeMode } from '@core/services/theme.service';
+import { ThemeService } from '@core/services/theme.service';
 
 @Component({
   selector: 'app-settings',
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss'],
   imports: [
-    IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton,
+    IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonIcon, IonToggle,
   ],
 })
@@ -52,9 +52,8 @@ export class SettingsPage {
     });
   }
 
-  cyclTheme() {
-    const next: Record<ThemeMode, ThemeMode> = { system: 'dark', dark: 'light', light: 'system' };
-    this.theme.setMode(next[this.theme.mode()]);
+  goTheme() {
+    this.router.navigate(['/tabs/settings/theme']);
   }
 
   goReports() {
